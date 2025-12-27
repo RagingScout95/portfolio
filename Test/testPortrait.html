@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Wireframe Portrait Flicker</title>
+    <!-- Tailwind CDN (optional, mostly for layout) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Full-page center layout */
+        body {
+            background: radial-gradient(circle at top, #111827, #020617);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e5e7eb;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                sans-serif;
+            overflow: hidden;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.65);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            backdrop-filter: blur(14px);
+        }
+
+        /* SVG sizing */
+        .portrait-wrapper {
+            width: min(60vw, 420px);
+            height: min(80vh, 560px);
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Base wireframe line style */
+        .wireframe-edge {
+            fill: none;
+            stroke: #e5e7eb;
+            stroke-width: 1.3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            opacity: 0.7;
+            transition: opacity 0.15s ease-out, stroke-width 0.15s ease-out;
+        }
+
+        /* Flicker animation */
+        @keyframes edgeFlicker {
+            0% {
+                opacity: 0.2;
+                stroke-width: 0.8;
+            }
+
+            20% {
+                opacity: 1;
+                stroke-width: 1.8;
+            }
+
+            40% {
+                opacity: 0.3;
+                stroke-width: 1.1;
+            }
+
+            60% {
+                opacity: 0.9;
+                stroke-width: 1.6;
+            }
+
+            80% {
+                opacity: 0.4;
+                stroke-width: 1;
+            }
+
+            100% {
+                opacity: 0.7;
+                stroke-width: 1.3;
+            }
+        }
+
+        .flicker {
+            animation: edgeFlicker 0.45s linear;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1 class="text-xl font-semibold mb-4 text-center">
+            Wireframe Portrait – Interactive
+        </h1>
+        <p class="text-xs text-slate-400 mb-3 text-center">
+            Move your mouse over the portrait to make the edges flicker ✨
+        </p>
+
+        <div class="portrait-wrapper">
+            <!-- ========= WIRE-FRAME SVG START ============== -->
+            <svg viewBox="0 0 300 420" id="portrait-svg">
+                <defs>
+                    <!-- soft vignette glow -->
+                    <radialGradient id="bgGlow" cx="50%" cy="10%" r="90%">
+                        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.5" />
+                        <stop offset="100%" stop-color="#020617" stop-opacity="0" />
+                    </radialGradient>
+                </defs>
+
+                <rect x="0" y="0" width="300" height="420" fill="url(#bgGlow)" />
+
+                <!-- GROUP WHERE YOUR PORTRAIT LIVES -->
+                <g id="wireframe-shape" transform="translate(40, 40)">
+                    <!--
+            TODO: Replace these demo paths with the paths from YOUR
+            own SVG wireframe portrait (face traced from your photo).
+          -->
+
+                    <!-- Head contour -->
+                    <path class="wireframe-edge" d="M110 0
+               C70 4, 30 40, 24 96
+               C18 152, 32 214, 60 252
+               C88 290, 132 292, 160 252
+               C188 212, 202 150, 196 96
+               C190 40, 150 4, 110 0
+               Z" />
+
+                    <!-- Center line -->
+                    <path class="wireframe-edge" d="M112 -4 L112 60  L112 210  L106 258" />
+
+                    <!-- Left face planes -->
+                    <polyline class="wireframe-edge" points="112 60  76 70  54 100  60 140  74 170  96 188 112 190" />
+                    <polyline class="wireframe-edge" points="76 70  60 52  40 70  24 96" />
+                    <polyline class="wireframe-edge" points="54 100  38 120  42 150  60 140" />
+
+                    <!-- Right face planes -->
+                    <polyline class="wireframe-edge"
+                        points="112 60  148 70  170 100  164 140  150 170  128 188 112 190" />
+                    <polyline class="wireframe-edge" points="148 70  164 52  186 70  196 96" />
+                    <polyline class="wireframe-edge" points="170 100  186 120  182 150  164 140" />
+
+                    <!-- Left eye socket -->
+                    <polygon class="wireframe-edge" points="72 110  92 104  112 110  96 122  76 122" />
+                    <polyline class="wireframe-edge" points="80 116  92 118  104 116" />
+
+                    <!-- Right eye socket -->
+                    <polygon class="wireframe-edge" points="112 110 132 104 152 110 136 122 116 122" />
+                    <polyline class="wireframe-edge" points="120 116 132 118 144 116" />
+
+                    <!-- Nose planes -->
+                    <polyline class="wireframe-edge" points="112 110 104 134 108 152 112 160 116 152 120 134 112 110" />
+                    <polyline class="wireframe-edge" points="104 134 92 142 104 148 112 148 120 148 132 142 120 134" />
+
+                    <!-- Mouth / lips -->
+                    <polyline class="wireframe-edge" points="90 178 104 184 112 186 120 184 134 178" />
+                    <polyline class="wireframe-edge" points="94 192 104 196 112 198 120 196 130 192" />
+
+                    <!-- Jaw & neck planes -->
+                    <polyline class="wireframe-edge" points="76 170 68 192 74 220 92 238 106 246" />
+                    <polyline class="wireframe-edge" points="148 170 156 192 150 220 132 238 118 246" />
+                    <polyline class="wireframe-edge" points="92 238 112 246 132 238" />
+
+                    <!-- Hair / top planes -->
+                    <polyline class="wireframe-edge" points="60 52 76 32 110 20 144 32 164 52" />
+                    <polyline class="wireframe-edge" points="76 32 70 10 96 4 120 4 150 10 144 32" />
+                </g>
+            </svg>
+            <!-- ========= WIRE-FRAME SVG END ============== -->
+        </div>
+    </div>
+
+    <script>
+        // Grab all edges inside the portrait wireframe
+        const svg = document.getElementById("portrait-svg");
+        const edges = Array.from(svg.querySelectorAll(".wireframe-edge"));
+
+        let rafId = null;
+
+        function randomFlicker(mouseX, mouseY) {
+            // Cancel any existing animation loop
+            if (rafId) cancelAnimationFrame(rafId);
+
+            const bounds = svg.getBoundingClientRect();
+
+            // Normalized mouse position in SVG space (0..1)
+            const nx = (mouseX - bounds.left) / bounds.width;
+            const ny = (mouseY - bounds.top) / bounds.height;
+
+            function loop() {
+                // Reset all edges
+                edges.forEach((edge) => edge.classList.remove("flicker"));
+
+                // Flicker a random subset of edges based on mouse position
+                const count = Math.floor(8 + nx * 10); // more edges when closer to right
+                for (let i = 0; i < count; i++) {
+                    const index = Math.floor(Math.random() * edges.length);
+                    const edge = edges[index];
+
+                    // Slight probability weighting by vertical mouse position
+                    const edgeBox = edge.getBBox();
+                    const edgeCenterY = edgeBox.y + edgeBox.height / 2;
+                    const edgeN = edgeCenterY / bounds.height;
+
+                    if (Math.abs(edgeN - ny) < 0.4 || Math.random() > 0.6) {
+                        edge.classList.add("flicker");
+                    }
+                }
+
+                // Keep the flicker going while mouse is moving over the SVG
+                rafId = requestAnimationFrame(loop);
+            }P
+
+            loop();
+        }
+
+        svg.addEventListener("mousemove", (e) => {
+            randomFlicker(e.clientX, e.clientY);
+        });
+
+        svg.addEventListener("mouseleave", () => {
+            if (rafId) cancelAnimationFrame(rafId);
+            edges.forEach((edge) => edge.classList.remove("flicker"));
+        });
+    </script>
+</body>
+
+</html>
