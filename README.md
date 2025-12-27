@@ -97,16 +97,72 @@ The application will automatically reload if you change any source files.
 
 ## Customization
 
-### Update Your Information
+### GitHub Integration
 
-All portfolio data is currently stored in the `PortfolioDataService`. To customize your portfolio:
+The portfolio automatically fetches data from your GitHub profile:
+- **Profile Info**: Name, bio, and avatar from your GitHub profile
+- **Projects**: Automatically populated from your public repositories (top 12, excluding forks)
+- **Skills**: Extracted from languages used in your repositories
 
-**Edit:** `src/app/portfolio/services/portfolio-data.service.ts`
+The GitHub username is configured in `src/app/portfolio/services/github-api.service.ts` (currently set to `RagingScout95`).
 
-Update the mock data in these methods:
-- `getProfile()` - Your name, role, bio, education, skills, current job, and social links
-- `getExperiences()` - Your work history
-- `getProjects()` - Your projects
+### Adding LinkedIn Data
+
+Since LinkedIn's API requires special access, you'll need to manually add your LinkedIn data. Edit: `src/app/portfolio/services/portfolio-data.service.ts`
+
+#### 1. Update Your Role and Current Job
+
+In the `getProfile()` method:
+
+```typescript
+role: 'Your Actual Job Title', // e.g., 'Full Stack Developer', 'Software Engineer'
+
+currentJob: {
+  title: 'Your Current Job Title',
+  company: 'Your Company Name',
+  since: 'Start Date', // e.g., 'January 2023'
+  description: 'Your job description and key responsibilities'
+}
+```
+
+#### 2. Add Your Education
+
+In the `education` array within `getProfile()`:
+
+```typescript
+education: [
+  {
+    degree: 'Your Degree',
+    institute: 'Your University/College',
+    year: 'Graduation Year'
+  }
+]
+```
+
+#### 3. Add Your Work Experience
+
+In the `getExperiences()` method:
+
+```typescript
+getExperiences(): Observable<Experience[]> {
+  return of([
+    {
+      role: 'Your Job Title',
+      company: 'Company Name',
+      from: 'Start Date', // e.g., 'Jan 2022'
+      to: 'End Date or Present', // e.g., 'Dec 2023' or 'Present'
+      description: [
+        'Key achievement or responsibility 1',
+        'Key achievement or responsibility 2',
+        'Key achievement or responsibility 3'
+      ]
+    }
+    // Add more experiences in reverse chronological order (newest first)
+  ]);
+}
+```
+
+**Note**: GitHub data (projects, skills, profile photo, bio) is automatically fetched. Only add your LinkedIn-specific data (experience, education, current job details).
 
 ### Replace with Backend API
 

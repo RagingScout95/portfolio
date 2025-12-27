@@ -1,179 +1,152 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, forkJoin, map, catchError, of } from 'rxjs';
 import { Profile, Experience, Project, SocialLink } from '../models/portfolio.models';
+import { GitHubApiService } from './github-api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PortfolioDataService {
+  private linkedInUrl = 'https://www.linkedin.com/in/prakhar-singh-rajput-7684b887/';
+  private githubUrl = 'https://github.com/RagingScout95';
 
-  getProfile(): Profile {
-    return {
-      name: 'John Doe',
-      role: 'Senior Full Stack Developer',
-      tagline: 'Building scalable web applications with modern technologies',
-      photoUrl: 'https://via.placeholder.com/400x400',
-      about: 'Passionate software engineer with 8+ years of experience in building enterprise-level applications. I specialize in Angular, Node.js, and cloud technologies. I love solving complex problems and creating intuitive user experiences.',
-      education: [
-        {
-          degree: 'Master of Science in Computer Science',
-          institute: 'Stanford University',
-          year: '2015'
+  constructor(
+    private http: HttpClient,
+    private githubApi: GitHubApiService
+  ) {}
+
+  getProfile(): Observable<Profile> {
+    return this.githubApi.getUserProfile().pipe(
+      map(githubUser => ({
+        name: githubUser.name || 'Prakhar Singh Rajput',
+        role: 'Software Developer', // You can update this manually
+        tagline: githubUser.bio || 'Building innovative software solutions',
+        photoUrl: githubUser.avatar_url,
+        about: githubUser.bio || 'Passionate software developer with experience in building applications across various technologies. I love solving complex problems and creating intuitive user experiences.',
+        education: [
+          // Add your education details here manually
+          // {
+          //   degree: 'Your Degree',
+          //   institute: 'Your Institute',
+          //   year: 'Year'
+          // }
+        ],
+        skills: [] as { name: string }[], // Will be populated from GitHub
+        currentJob: {
+          title: 'Software Developer', // Update this manually from LinkedIn
+          company: 'Company Name', // Update this manually from LinkedIn
+          since: 'Date', // Update this manually from LinkedIn
+          description: 'Your current job description' // Update this manually from LinkedIn
         },
-        {
-          degree: 'Bachelor of Technology in Software Engineering',
-          institute: 'MIT',
-          year: '2013'
-        }
-      ],
-      skills: [
-        { name: 'Angular' },
-        { name: 'TypeScript' },
-        { name: 'Node.js' },
-        { name: 'React' },
-        { name: 'Vue.js' },
-        { name: 'Express' },
-        { name: 'MongoDB' },
-        { name: 'PostgreSQL' },
-        { name: 'AWS' },
-        { name: 'Docker' },
-        { name: 'Kubernetes' },
-        { name: 'GraphQL' },
-        { name: 'REST APIs' },
-        { name: 'Tailwind CSS' },
-        { name: 'Git' },
-        { name: 'CI/CD' }
-      ],
+        socialLinks: [
+          {
+            name: 'GitHub',
+            url: this.githubUrl,
+            icon: 'GH'
+          },
+          {
+            name: 'LinkedIn',
+            url: this.linkedInUrl,
+            icon: 'LI'
+          }
+        ]
+      })),
+      catchError(() => {
+        // Fallback to default profile if API fails
+        return of(this.getDefaultProfile());
+      })
+    );
+  }
+
+  getProfileWithSkills(): Observable<Profile> {
+    return forkJoin({
+      profile: this.getProfile(),
+      skills: this.githubApi.getSkillsFromRepos()
+    }).pipe(
+      map(({ profile, skills }) => ({
+        ...profile,
+        skills
+      }))
+    );
+  }
+
+  private getDefaultProfile(): Profile {
+    return {
+      name: 'Prakhar Singh Rajput',
+      role: 'Software Developer',
+      tagline: 'Building innovative software solutions',
+      photoUrl: 'https://via.placeholder.com/400x400',
+      about: 'Passionate software developer with experience in building applications across various technologies.',
+      education: [],
+      skills: [],
       currentJob: {
-        title: 'Lead Frontend Engineer',
-        company: 'Tech Innovations Inc.',
-        since: 'January 2022',
-        description: 'Leading a team of 8 engineers to build next-generation web applications. Architecting scalable frontend solutions using Angular and React. Mentoring junior developers and driving best practices.'
+        title: 'Software Developer',
+        company: 'Company Name',
+        since: 'Date',
+        description: 'Your current job description'
       },
       socialLinks: [
         {
           name: 'GitHub',
-          url: 'https://github.com/johndoe',
+          url: this.githubUrl,
           icon: 'GH'
         },
         {
           name: 'LinkedIn',
-          url: 'https://linkedin.com/in/johndoe',
+          url: this.linkedInUrl,
           icon: 'LI'
-        },
-        {
-          name: 'X',
-          url: 'https://x.com/johndoe',
-          icon: 'X'
-        },
-        {
-          name: 'Email',
-          url: 'mailto:john.doe@example.com',
-          icon: '✉'
         }
       ]
     };
   }
 
-  getExperiences(): Experience[] {
-    return [
-      {
-        role: 'Lead Frontend Engineer',
-        company: 'Tech Innovations Inc.',
-        from: 'Jan 2022',
-        to: 'Present',
-        description: [
-          'Led frontend architecture for enterprise SaaS platform serving 100K+ users',
-          'Reduced page load time by 60% through optimization and lazy loading strategies',
-          'Mentored team of 8 engineers and established code review best practices',
-          'Implemented micro-frontend architecture using Angular Module Federation'
-        ]
-      },
-      {
-        role: 'Senior Full Stack Developer',
-        company: 'Digital Solutions Corp',
-        from: 'Mar 2019',
-        to: 'Dec 2021',
-        description: [
-          'Built and maintained multiple client-facing web applications',
-          'Designed RESTful APIs using Node.js and Express',
-          'Integrated third-party services including Stripe, Auth0, and AWS',
-          'Improved application performance by 45% through database optimization'
-        ]
-      },
-      {
-        role: 'Full Stack Developer',
-        company: 'StartUp Ventures',
-        from: 'Jun 2016',
-        to: 'Feb 2019',
-        description: [
-          'Developed real-time collaboration features using WebSockets',
-          'Created responsive UI components with Angular and Material Design',
-          'Implemented CI/CD pipelines using Jenkins and Docker',
-          'Collaborated with UX team to improve user engagement by 35%'
-        ]
-      },
-      {
-        role: 'Junior Software Engineer',
-        company: 'Software Labs',
-        from: 'Aug 2015',
-        to: 'May 2016',
-        description: [
-          'Contributed to development of internal tools and dashboards',
-          'Fixed bugs and implemented new features across the stack',
-          'Participated in agile ceremonies and pair programming sessions',
-          'Learned best practices in software development and testing'
-        ]
-      }
-    ];
+  getExperiences(): Observable<Experience[]> {
+    // LinkedIn data needs to be added manually
+    // For now, return empty array - you can add your experiences manually
+    return of([
+      // Add your experiences here manually from LinkedIn
+      // {
+      //   role: 'Your Role',
+      //   company: 'Company Name',
+      //   from: 'Start Date',
+      //   to: 'End Date or Present',
+      //   description: [
+      //     'Achievement 1',
+      //     'Achievement 2',
+      //     'Achievement 3'
+      //   ]
+      // }
+    ]);
   }
 
-  getProjects(): Project[] {
-    return [
-      {
-        name: 'E-Commerce Platform',
-        description: 'Full-featured e-commerce solution with real-time inventory management, payment integration, and admin dashboard.',
-        techStack: ['Angular', 'Node.js', 'MongoDB', 'Stripe', 'AWS'],
-        liveUrl: 'https://example-ecommerce.com',
-        githubUrl: 'https://github.com/johndoe/ecommerce-platform'
-      },
-      {
-        name: 'Project Management Tool',
-        description: 'Collaborative project management application with Kanban boards, real-time updates, and team chat.',
-        techStack: ['Angular', 'Firebase', 'RxJS', 'Tailwind CSS'],
-        liveUrl: 'https://example-pm-tool.com',
-        githubUrl: 'https://github.com/johndoe/project-manager'
-      },
-      {
-        name: 'Social Media Dashboard',
-        description: 'Analytics dashboard for tracking social media metrics across multiple platforms with beautiful data visualizations.',
-        techStack: ['React', 'TypeScript', 'Chart.js', 'Express', 'PostgreSQL'],
-        liveUrl: 'https://example-dashboard.com',
-        githubUrl: 'https://github.com/johndoe/social-dashboard'
-      },
-      {
-        name: 'Weather Forecast App',
-        description: 'Modern weather application with 7-day forecasts, location search, and beautiful weather animations.',
-        techStack: ['Angular', 'OpenWeather API', 'Tailwind CSS', 'PWA'],
-        liveUrl: 'https://example-weather.com',
-        githubUrl: 'https://github.com/johndoe/weather-app'
-      },
-      {
-        name: 'Blog CMS',
-        description: 'Headless CMS for managing blog content with markdown support, media library, and SEO optimization.',
-        techStack: ['Node.js', 'GraphQL', 'MongoDB', 'Apollo', 'Next.js'],
-        githubUrl: 'https://github.com/johndoe/blog-cms'
-      },
-      {
-        name: 'Fitness Tracker',
-        description: 'Mobile-responsive fitness tracking app with workout plans, progress charts, and goal setting.',
-        techStack: ['Angular', 'Ionic', 'Firebase', 'Chart.js'],
-        liveUrl: 'https://example-fitness.com'
-      }
-    ];
+  getProjects(): Observable<Project[]> {
+    return this.githubApi.getProjectsFromRepos().pipe(
+      catchError(() => {
+        // Fallback to empty array if API fails
+        return of([]);
+      })
+    );
   }
 
-  getSocialLinks(): SocialLink[] {
-    return this.getProfile().socialLinks;
+  getSocialLinks(): Observable<SocialLink[]> {
+    return this.getProfile().pipe(
+      map(profile => profile.socialLinks),
+      catchError(() => {
+        return of([
+          {
+            name: 'GitHub',
+            url: this.githubUrl,
+            icon: 'GH'
+          },
+          {
+            name: 'LinkedIn',
+            url: this.linkedInUrl,
+            icon: 'LI'
+          }
+        ]);
+      })
+    );
   }
 }
 
