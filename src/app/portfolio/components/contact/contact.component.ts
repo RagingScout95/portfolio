@@ -11,11 +11,11 @@ import { SocialLink } from '../../models/portfolio.models';
   imports: [CommonModule, FormsModule, ButtonComponent, SocialIconComponent],
   template: `
     <div class="max-w-6xl mx-auto px-4 md:px-8 py-16">
-      <h2 class="text-4xl md:text-5xl font-bold text-slate-100 mb-6 text-center">
+      <h2 class="text-4xl md:text-5xl font-bold text-gray-100 mb-6 text-center">
         Contact Me
       </h2>
       
-      <p class="text-lg text-slate-400 text-center mb-12 max-w-2xl mx-auto">
+      <p class="text-lg text-gray-400 text-center mb-12 max-w-2xl mx-auto">
         Feel free to reach out! Whether you have a question, want to collaborate, or just want to say hello, I'd love to hear from you.
       </p>
       
@@ -23,11 +23,11 @@ import { SocialLink } from '../../models/portfolio.models';
         <!-- Contact Form -->
         <form
           (ngSubmit)="onSubmit()"
-          class="bg-slate-900 border border-slate-800 rounded-xl shadow-lg p-8 space-y-6"
+          class="bg-black border border-red-900/50 rounded-xl shadow-lg p-8 space-y-6"
         >
           <!-- Name Input -->
           <div>
-            <label for="name" class="block text-slate-300 font-semibold mb-2">
+            <label for="name" class="block text-gray-300 font-semibold mb-2">
               Name
             </label>
             <input
@@ -36,14 +36,14 @@ import { SocialLink } from '../../models/portfolio.models';
               name="name"
               [(ngModel)]="formData.name"
               required
-              class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 transition"
+              class="w-full px-4 py-3 bg-black border border-red-900/50 rounded-lg text-gray-100 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/50 transition"
               placeholder="Your name"
             />
           </div>
           
           <!-- Email Input -->
           <div>
-            <label for="email" class="block text-slate-300 font-semibold mb-2">
+            <label for="email" class="block text-gray-300 font-semibold mb-2">
               Email
             </label>
             <input
@@ -52,14 +52,14 @@ import { SocialLink } from '../../models/portfolio.models';
               name="email"
               [(ngModel)]="formData.email"
               required
-              class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 transition"
+              class="w-full px-4 py-3 bg-black border border-red-900/50 rounded-lg text-gray-100 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/50 transition"
               placeholder="your.email@example.com"
             />
           </div>
           
           <!-- Message Textarea -->
           <div>
-            <label for="message" class="block text-slate-300 font-semibold mb-2">
+            <label for="message" class="block text-gray-300 font-semibold mb-2">
               Message
             </label>
             <textarea
@@ -68,7 +68,7 @@ import { SocialLink } from '../../models/portfolio.models';
               [(ngModel)]="formData.message"
               required
               rows="6"
-              class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 transition resize-none"
+              class="w-full px-4 py-3 bg-black border border-red-900/50 rounded-lg text-gray-100 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/50 transition resize-none"
               placeholder="Your message..."
             ></textarea>
           </div>
@@ -92,7 +92,7 @@ import { SocialLink } from '../../models/portfolio.models';
         
         <!-- Social Links -->
         <div class="mt-12">
-          <p class="text-slate-400 text-center mb-6">
+          <p class="text-gray-400 text-center mb-6">
             Or connect with me on:
           </p>
           <div class="flex gap-4 justify-center">

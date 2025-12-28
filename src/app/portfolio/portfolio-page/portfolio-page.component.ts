@@ -27,12 +27,12 @@ import { Profile, Experience, Project } from '../models/portfolio.models';
     RevealOnScrollDirective
   ],
   template: `
-    <div class="bg-slate-950 text-slate-100 min-h-screen">
+    <div class="bg-black text-gray-100 min-h-screen">
       <!-- Loading Indicator -->
       <div *ngIf="isLoading" class="flex items-center justify-center min-h-screen">
         <div class="text-center">
-          <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mb-4"></div>
-          <p class="text-slate-400">Loading portfolio data...</p>
+          <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mb-4"></div>
+          <p class="text-gray-400">Loading portfolio data...</p>
         </div>
       </div>
 

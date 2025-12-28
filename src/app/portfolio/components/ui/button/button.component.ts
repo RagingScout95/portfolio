@@ -36,8 +36,8 @@ export class ButtonComponent {
     const baseClasses = 'px-6 py-3 rounded-lg font-semibold transition-all duration-300 inline-block';
     
     const typeClasses = this.type === 'primary'
-      ? 'bg-blue-600 text-white hover:bg-blue-700 hover:scale-105 shadow-lg hover:shadow-blue-500/50'
-      : 'border-2 border-slate-600 text-slate-100 hover:border-blue-500 hover:text-blue-400 hover:scale-105';
+      ? 'bg-red-600 text-white hover:bg-red-700 hover:scale-105 shadow-lg hover:shadow-red-600/50'
+      : 'border-2 border-gray-600 text-gray-100 hover:border-red-600 hover:text-red-500 hover:scale-105';
 
     return `${baseClasses} ${typeClasses}`;
   }

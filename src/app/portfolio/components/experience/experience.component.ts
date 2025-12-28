@@ -9,7 +9,7 @@ import { Experience } from '../../models/portfolio.models';
   imports: [CommonModule, ExperienceItemComponent],
   template: `
     <div class="max-w-6xl mx-auto px-4 md:px-8 py-16">
-      <h2 class="text-4xl md:text-5xl font-bold text-slate-100 mb-12 text-center">
+      <h2 class="text-4xl md:text-5xl font-bold text-gray-100 mb-12 text-center">
         Experience
       </h2>
       

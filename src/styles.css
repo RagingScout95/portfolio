@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  /* Override Tailwind's default border color (#e5e7eb - light gray with blue tint) for red-black theme */
+  *, ::before, ::after {
+    border-color: transparent;
+  }
+}
+
 /* Global Styles */
 * {
   margin: 0;
@@ -19,7 +26,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #000000;
+  color: #f1f5f9;
 }
+
+
 
 
 

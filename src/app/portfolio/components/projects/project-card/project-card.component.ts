@@ -8,12 +8,12 @@ import { Project } from '../../../models/portfolio.models';
   standalone: true,
   imports: [CommonModule, ButtonComponent],
   template: `
-    <div class="bg-slate-900 border border-slate-800 rounded-xl shadow-lg p-6 hover:border-blue-500 hover:shadow-blue-500/20 transition-all duration-300 flex flex-col h-full">
-      <h3 class="text-2xl font-bold text-blue-400 mb-3">
+    <div class="bg-black border border-red-900/50 rounded-xl shadow-lg p-6 hover:border-red-600 hover:shadow-red-600/20 transition-all duration-300 flex flex-col h-full">
+      <h3 class="text-2xl font-bold text-red-500 mb-3">
         {{ project.name }}
       </h3>
       
-      <p class="text-slate-300 mb-4 flex-grow">
+      <p class="text-gray-300 mb-4 flex-grow">
         {{ project.description }}
       </p>
       
@@ -21,7 +21,7 @@ import { Project } from '../../../models/portfolio.models';
       <div class="flex flex-wrap gap-2 mb-6">
         <span
           *ngFor="let tech of project.techStack"
-          class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-sm text-slate-300"
+          class="px-3 py-1 bg-black border border-red-900/50 rounded-full text-sm text-gray-300"
         >
           {{ tech }}
         </span>

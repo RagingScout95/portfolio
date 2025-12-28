@@ -9,17 +9,17 @@ import { SocialLink } from '../../models/portfolio.models';
   standalone: true,
   imports: [CommonModule, ButtonComponent, SocialIconComponent],
   template: `
-    <div class="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 px-4 md:px-8">
+    <div class="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gradient-to-b from-black via-black to-black px-4 md:px-8">
       <div class="max-w-6xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-12">
         <!-- Left Content -->
         <div class="flex-1 text-center md:text-left space-y-6">
-          <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-slate-100 animate-fade-in">
+          <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-100 animate-fade-in">
             {{ name }}
           </h1>
-          <p class="text-2xl md:text-3xl text-blue-400 font-semibold">
+          <p class="text-2xl md:text-3xl text-red-500 font-semibold">
             {{ role }}
           </p>
-          <p class="text-lg md:text-xl text-slate-400 max-w-2xl">
+          <p class="text-lg md:text-xl text-gray-400 max-w-2xl">
             {{ tagline }}
           </p>
           
@@ -49,11 +49,11 @@ import { SocialLink } from '../../models/portfolio.models';
         <!-- Right Content - Profile Image -->
         <div class="flex-shrink-0">
           <div class="relative">
-            <div class="absolute inset-0 bg-blue-600 rounded-full blur-3xl opacity-20"></div>
+            <div class="absolute inset-0 bg-red-600 rounded-full blur-3xl opacity-20"></div>
             <img
               [src]="photoUrl"
               [alt]="name"
-              class="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full object-cover border-4 border-blue-500 shadow-2xl shadow-blue-500/50"
+              class="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full object-cover border-4 border-red-600 shadow-2xl shadow-red-600/50"
             />
           </div>
         </div>

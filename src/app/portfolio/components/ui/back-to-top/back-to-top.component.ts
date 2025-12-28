@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
     <button
       *ngIf="isVisible"
       (click)="scrollToTop()"
-      class="fixed bottom-6 right-6 z-40 flex items-center justify-center w-12 h-12 rounded-full bg-blue-600 shadow-lg hover:bg-blue-700 hover:scale-110 transition-all duration-300 text-white text-xl"
+      class="fixed bottom-6 right-6 z-40 flex items-center justify-center w-12 h-12 rounded-full bg-red-600 shadow-lg hover:bg-red-700 hover:scale-110 transition-all duration-300 text-white text-xl"
       aria-label="Back to top"
     >
       🚀

@@ -11,7 +11,7 @@ export interface NavSection {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <nav class="fixed top-0 inset-x-0 z-50 backdrop-blur bg-slate-950/70 border-b border-slate-800">
+    <nav class="fixed top-0 inset-x-0 z-50 backdrop-blur bg-black/90 border-b border-red-900/50">
       <div class="max-w-6xl mx-auto px-4 md:px-8">
         <div class="flex items-center justify-between h-16">
           <!-- Logo / Brand -->
@@ -19,7 +19,7 @@ export interface NavSection {
             <a
               href="#hero"
               (click)="scrollToSection($event, 'hero')"
-              class="text-2xl font-bold text-blue-400 hover:text-blue-300 transition"
+              class="text-2xl font-bold text-red-500 hover:text-red-400 transition"
             >
               Portfolio
             </a>
@@ -40,7 +40,7 @@ export interface NavSection {
           <!-- Mobile Menu Button -->
           <button
             (click)="toggleMobileMenu()"
-            class="md:hidden p-2 rounded-lg text-slate-300 hover:text-blue-400 hover:bg-slate-800 transition"
+            class="md:hidden p-2 rounded-lg text-gray-300 hover:text-red-500 hover:bg-black transition"
             aria-label="Toggle menu"
           >
             <svg
@@ -77,7 +77,7 @@ export interface NavSection {
         <!-- Mobile Navigation -->
         <div
           *ngIf="mobileMenuOpen"
-          class="md:hidden py-4 space-y-2 border-t border-slate-800"
+          class="md:hidden py-4 space-y-2 border-t border-red-900/50"
         >
           <a
             *ngFor="let section of sections"
@@ -124,8 +124,8 @@ export class NavbarComponent {
   }
 
   getLinkClasses(sectionId: string): string {
-    const baseClasses = 'text-slate-300 hover:text-blue-400 transition-colors duration-300 font-medium relative pb-1';
-    const activeClasses = 'text-blue-400 after:content-[""] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-blue-500';
+    const baseClasses = 'text-gray-300 hover:text-red-500 transition-colors duration-300 font-medium relative pb-1';
+    const activeClasses = 'text-red-500 after:content-[""] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-red-600';
     
     return this.activeSection === sectionId
       ? `${baseClasses} ${activeClasses}`
@@ -133,8 +133,8 @@ export class NavbarComponent {
   }
 
   getMobileLinkClasses(sectionId: string): string {
-    const baseClasses = 'block px-4 py-3 rounded-lg text-slate-300 hover:text-blue-400 hover:bg-slate-800 transition-colors duration-300 font-medium';
-    const activeClasses = 'text-blue-400 bg-slate-800';
+    const baseClasses = 'block px-4 py-3 rounded-lg text-gray-300 hover:text-red-500 hover:bg-black transition-colors duration-300 font-medium';
+    const activeClasses = 'text-red-500 bg-black';
     
     return this.activeSection === sectionId
       ? `${baseClasses} ${activeClasses}`

@@ -12,7 +12,7 @@ import { SocialLink } from '../../../models/portfolio.models';
       target="_blank"
       rel="noreferrer"
       [title]="link.name"
-      class="flex items-center justify-center w-12 h-12 rounded-full bg-slate-800 border border-slate-700 hover:bg-slate-700 hover:border-blue-500 hover:scale-110 transition-all duration-300 text-slate-100 font-semibold"
+      class="flex items-center justify-center w-12 h-12 rounded-full bg-black border border-red-900/50 hover:border-red-600 hover:scale-110 transition-all duration-300 text-gray-100 font-semibold"
     >
       <span class="text-sm">{{ link.icon || getInitials(link.name) }}</span>
     </a>
