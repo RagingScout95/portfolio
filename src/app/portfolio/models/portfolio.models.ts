@@ -42,6 +42,7 @@ export interface Profile {
   role: string;
   tagline: string;
   photoUrl: string;
+  faviconUrl?: string;
   about: string;
   education: Education[];
   skills: Skill[];

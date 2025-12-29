@@ -9,7 +9,7 @@ import { SocialLink } from '../../models/portfolio.models';
   standalone: true,
   imports: [CommonModule, ButtonComponent, SocialIconComponent],
   template: `
-    <div class="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gradient-to-b from-black via-black to-black px-4 md:px-8">
+    <div class="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gradient-to-b from-black via-black to-black px-4 md:px-8 pt-20 md:pt-0">
       <div class="max-w-6xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-12">
         <!-- Left Content -->
         <div class="flex-1 text-center md:text-left space-y-6">

@@ -1,150 +1,121 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin, map, catchError, of } from 'rxjs';
+import { Observable, map, catchError, of } from 'rxjs';
 import { Profile, Experience, Project, SocialLink } from '../models/portfolio.models';
-import { GitHubApiService } from './github-api.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PortfolioDataService {
-  private linkedInUrl = 'https://www.linkedin.com/in/prakhar-singh-rajput-7684b887/';
-  private githubUrl = 'https://github.com/RagingScout95';
+  private apiUrl = `${environment.apiUrl}/public/portfolio`;
 
   constructor(
-    private http: HttpClient,
-    private githubApi: GitHubApiService
+    private http: HttpClient
   ) {}
 
-  getProfile(): Observable<Profile> {
-    return this.githubApi.getUserProfile().pipe(
-      map(githubUser => ({
-        name: githubUser.name || 'Prakhar Singh Rajput',
-        role: 'Software Developer', // You can update this manually
-        tagline: githubUser.bio || 'Building innovative software solutions',
-        photoUrl: githubUser.avatar_url,
-        about: githubUser.bio || 'Passionate software developer with experience in building applications across various technologies. I love solving complex problems and creating intuitive user experiences.',
-        education: [
-          // Add your education details here manually
-          // {
-          //   degree: 'Your Degree',
-          //   institute: 'Your Institute',
-          //   year: 'Year'
-          // }
-        ],
-        skills: [] as { name: string }[], // Will be populated from GitHub
-        currentJob: {
-          title: 'Software Developer', // Update this manually from LinkedIn
-          company: 'Company Name', // Update this manually from LinkedIn
-          since: 'Date', // Update this manually from LinkedIn
-          description: 'Your current job description' // Update this manually from LinkedIn
-        },
-        socialLinks: [
-          {
-            name: 'GitHub',
-            url: this.githubUrl,
-            icon: 'GH'
-          },
-          {
-            name: 'LinkedIn',
-            url: this.linkedInUrl,
-            icon: 'LI'
-          }
-        ]
-      })),
+  private getPortfolioData(): Observable<any> {
+    return this.http.get(this.apiUrl).pipe(
       catchError(() => {
-        // Fallback to default profile if API fails
-        return of(this.getDefaultProfile());
+        // Fallback to empty data if API fails
+        return of({
+          profile: null,
+          educations: [],
+          skills: [],
+          currentJob: null,
+          socialLinks: [],
+          experiences: [],
+          projects: []
+        });
+      })
+    );
+  }
+
+  getProfile(): Observable<Profile> {
+    return this.getPortfolioData().pipe(
+      map(data => {
+        const profile = data.profile || {};
+        const currentJob = data.currentJob || {};
+        const educations = data.educations || [];
+        const skills = data.skills || [];
+        const socialLinks = data.socialLinks || [];
+        
+        return {
+          name: profile.name || 'Your Name',
+          role: profile.role || 'Your Role',
+          tagline: profile.tagline || 'Your Tagline',
+          photoUrl: profile.photoUrl || 'https://via.placeholder.com/400x400',
+          faviconUrl: profile.faviconUrl,
+          about: profile.about || 'Your About section',
+          education: educations.map((edu: any) => ({
+            degree: edu.degree,
+            institute: edu.institute,
+            year: edu.year
+          })),
+          skills: skills.map((skill: any) => ({
+            name: skill.name
+          })),
+          currentJob: {
+            title: currentJob.title || 'Current Job Title',
+            company: currentJob.company || 'Company Name',
+            since: currentJob.since || 'Date',
+            description: currentJob.description || 'Job Description'
+          },
+          socialLinks: socialLinks.map((link: any) => ({
+            name: link.name,
+            url: link.url,
+            icon: link.icon || link.name.substring(0, 2).toUpperCase()
+          }))
+        };
       })
     );
   }
 
   getProfileWithSkills(): Observable<Profile> {
-    return forkJoin({
-      profile: this.getProfile(),
-      skills: this.githubApi.getSkillsFromRepos()
-    }).pipe(
-      map(({ profile, skills }) => ({
-        ...profile,
-        skills
-      }))
-    );
-  }
-
-  private getDefaultProfile(): Profile {
-    return {
-      name: 'Prakhar Singh Rajput',
-      role: 'Software Developer',
-      tagline: 'Building innovative software solutions',
-      photoUrl: 'https://via.placeholder.com/400x400',
-      about: 'Passionate software developer with experience in building applications across various technologies.',
-      education: [],
-      skills: [],
-      currentJob: {
-        title: 'Software Developer',
-        company: 'Company Name',
-        since: 'Date',
-        description: 'Your current job description'
-      },
-      socialLinks: [
-        {
-          name: 'GitHub',
-          url: this.githubUrl,
-          icon: 'GH'
-        },
-        {
-          name: 'LinkedIn',
-          url: this.linkedInUrl,
-          icon: 'LI'
-        }
-      ]
-    };
+    return this.getProfile();
   }
 
   getExperiences(): Observable<Experience[]> {
-    // LinkedIn data needs to be added manually
-    // For now, return empty array - you can add your experiences manually
-    return of([
-      // Add your experiences here manually from LinkedIn
-      // {
-      //   role: 'Your Role',
-      //   company: 'Company Name',
-      //   from: 'Start Date',
-      //   to: 'End Date or Present',
-      //   description: [
-      //     'Achievement 1',
-      //     'Achievement 2',
-      //     'Achievement 3'
-      //   ]
-      // }
-    ]);
+    return this.getPortfolioData().pipe(
+      map(data => {
+        const experiences = data.experiences || [];
+        return experiences.map((exp: any) => ({
+          role: exp.role,
+          company: exp.company,
+          from: exp.fromDate,
+          to: exp.toDate,
+          description: exp.descriptions || []
+        }));
+      })
+    );
   }
 
   getProjects(): Observable<Project[]> {
-    return this.githubApi.getProjectsFromRepos().pipe(
-      catchError(() => {
-        // Fallback to empty array if API fails
-        return of([]);
+    return this.getPortfolioData().pipe(
+      map(data => {
+        const projects = data.projects || [];
+        return projects.map((proj: any) => ({
+          name: proj.name,
+          description: proj.description,
+          techStack: proj.techStack || [],
+          liveUrl: proj.liveUrl,
+          githubUrl: proj.githubUrl,
+          demoUrl: proj.demoUrl,
+          imageUrl: proj.imageUrl
+        }));
       })
     );
   }
 
   getSocialLinks(): Observable<SocialLink[]> {
-    return this.getProfile().pipe(
-      map(profile => profile.socialLinks),
-      catchError(() => {
-        return of([
-          {
-            name: 'GitHub',
-            url: this.githubUrl,
-            icon: 'GH'
-          },
-          {
-            name: 'LinkedIn',
-            url: this.linkedInUrl,
-            icon: 'LI'
-          }
-        ]);
+    return this.getPortfolioData().pipe(
+      map(data => {
+        const socialLinks = data.socialLinks || [];
+        return socialLinks.map((link: any) => ({
+          name: link.name,
+          url: link.url,
+          icon: link.icon || link.name.substring(0, 2).toUpperCase()
+        }));
       })
     );
   }

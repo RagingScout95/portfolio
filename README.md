@@ -1,302 +1,355 @@
 # Portfolio Website
 
-**🔗 Live Demo:** [https://ragingscout97.in/](https://ragingscout97.in/)
+A modern, responsive portfolio website built with Angular 17 and Tailwind CSS, featuring smooth animations, dark theme, and dynamic content loading from a backend API.
 
-A modern, component-driven portfolio website built with Angular 17 (standalone components) and Tailwind CSS v4.
+## 🚀 Features
 
-## Features
+- **Modern Design** - Sleek dark theme with gradient backgrounds
+- **Fully Responsive** - Works seamlessly on all devices
+- **Smooth Animations** - Scroll-triggered reveal animations
+- **Dynamic Content** - Data loaded from backend API
+- **Social Integration** - GitHub, LinkedIn, Instagram, CodeChef links with icons
+- **Project Showcase** - Display projects with tech stacks and links
+- **Experience Timeline** - Professional work history
+- **Skills Display** - Technical skills showcase
+- **Contact Section** - Contact information and social links
+- **Dynamic Favicon** - Customizable favicon through admin panel
+- **SEO Friendly** - Optimized for search engines
+- **Back to Top Button** - Smooth scrolling navigation
 
-✨ **Modern Tech Stack**
-- Angular 17+ with standalone components
-- TypeScript for type safety
-- Tailwind CSS v4 for styling
-- Component-driven architecture
+## 🛠️ Tech Stack
 
-🎨 **Beautiful UI/UX**
-- Dark theme with gradient backgrounds
-- Smooth scroll navigation
-- Scroll-triggered animations
-- Responsive design (mobile, tablet, desktop)
-- Floating "Back to Top" rocket button
+- **Angular 17+** with standalone components
+- **TypeScript** - Type-safe development
+- **Tailwind CSS v4** - Utility-first styling
+- **RxJS** - Reactive data handling
+- **Angular Router** - Navigation
+- **HttpClient** - API communication
+- **Intersection Observer** - Scroll animations
 
-📱 **Sections**
-- **Hero**: Name, role, tagline, profile photo, social links, and CTA buttons
-- **About**: Bio, education, skills, and current job
-- **Experience**: Timeline-style work history
-- **Projects**: Showcase of your work with tech stacks and links
-- **Contact**: Contact form and social media links
-
-## Project Structure
-
-```
-src/app/portfolio/
-├── portfolio-page/
-│   └── portfolio-page.component.ts         # Main container
-├── components/
-│   ├── navbar/
-│   │   └── navbar.component.ts             # Sticky navigation
-│   ├── hero/
-│   │   └── hero.component.ts               # Hero section
-│   ├── about/
-│   │   └── about.component.ts              # About section
-│   ├── experience/
-│   │   ├── experience.component.ts         # Experience section
-│   │   └── experience-item/
-│   │       └── experience-item.component.ts # Timeline item
-│   ├── projects/
-│   │   ├── projects.component.ts           # Projects section
-│   │   └── project-card/
-│   │       └── project-card.component.ts   # Project card
-│   ├── contact/
-│   │   └── contact.component.ts            # Contact form
-│   └── ui/
-│       ├── button/
-│       │   └── button.component.ts         # Reusable button
-│       ├── social-icon/
-│       │   └── social-icon.component.ts    # Social media icon
-│       └── back-to-top/
-│           └── back-to-top.component.ts    # Floating back button
-├── directives/
-│   └── reveal-on-scroll.directive.ts       # Scroll animations
-├── services/
-│   └── portfolio-data.service.ts           # Data service (mock data)
-└── models/
-    └── portfolio.models.ts                 # TypeScript interfaces
-```
-
-## Getting Started
-
-### Prerequisites
+## 📋 Prerequisites
 
 - Node.js 18+ and npm
 - Angular CLI 17+
+- Backend API running (Portfolio-backend)
 
-### Installation
+## ⚙️ Installation
 
-1. **Install dependencies:**
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/RagingScout95/Portfolio-frontend.git
+cd Portfolio-frontend
+```
+
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-2. **Start development server:**
+### 3. Environment Configuration
+
+Update `src/environments/environment.ts` for development:
+
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:8080/api'
+};
+```
+
+Update `src/environments/environment.prod.ts` for production:
+
+```typescript
+export const environment = {
+  production: true,
+  apiUrl: 'https://your-api-domain.com/api'
+};
+```
+
+## 🚀 Running the Application
+
+### Development Server
 
 ```bash
 npm start
-```
-
-or
-
-```bash
+# or
 ng serve
 ```
 
-3. **Open your browser:**
-
 Navigate to `http://localhost:4200`
 
-The application will automatically reload if you change any source files.
-
-## Customization
-
-### GitHub Integration
-
-The portfolio automatically fetches data from your GitHub profile:
-- **Profile Info**: Name, bio, and avatar from your GitHub profile
-- **Projects**: Automatically populated from your public repositories (top 12, excluding forks)
-- **Skills**: Extracted from languages used in your repositories
-
-The GitHub username is configured in `src/app/portfolio/services/github-api.service.ts` (currently set to `RagingScout95`).
-
-### Adding LinkedIn Data
-
-Since LinkedIn's API requires special access, you'll need to manually add your LinkedIn data. Edit: `src/app/portfolio/services/portfolio-data.service.ts`
-
-#### 1. Update Your Role and Current Job
-
-In the `getProfile()` method:
-
-```typescript
-role: 'Your Actual Job Title', // e.g., 'Full Stack Developer', 'Software Engineer'
-
-currentJob: {
-  title: 'Your Current Job Title',
-  company: 'Your Company Name',
-  since: 'Start Date', // e.g., 'January 2023'
-  description: 'Your job description and key responsibilities'
-}
-```
-
-#### 2. Add Your Education
-
-In the `education` array within `getProfile()`:
-
-```typescript
-education: [
-  {
-    degree: 'Your Degree',
-    institute: 'Your University/College',
-    year: 'Graduation Year'
-  }
-]
-```
-
-#### 3. Add Your Work Experience
-
-In the `getExperiences()` method:
-
-```typescript
-getExperiences(): Observable<Experience[]> {
-  return of([
-    {
-      role: 'Your Job Title',
-      company: 'Company Name',
-      from: 'Start Date', // e.g., 'Jan 2022'
-      to: 'End Date or Present', // e.g., 'Dec 2023' or 'Present'
-      description: [
-        'Key achievement or responsibility 1',
-        'Key achievement or responsibility 2',
-        'Key achievement or responsibility 3'
-      ]
-    }
-    // Add more experiences in reverse chronological order (newest first)
-  ]);
-}
-```
-
-**Note**: GitHub data (projects, skills, profile photo, bio) is automatically fetched. Only add your LinkedIn-specific data (experience, education, current job details).
-
-### Replace with Backend API
-
-When ready to connect to your backend:
-
-1. Inject `HttpClient` into `PortfolioDataService`
-2. Replace the mock return statements with HTTP calls:
-
-```typescript
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
-export class PortfolioDataService {
-  private apiUrl = 'https://your-api.com/api';
-
-  constructor(private http: HttpClient) {}
-
-  getProfile(): Observable<Profile> {
-    return this.http.get<Profile>(`${this.apiUrl}/profile`);
-  }
-
-  getExperiences(): Observable<Experience[]> {
-    return this.http.get<Experience[]>(`${this.apiUrl}/experiences`);
-  }
-
-  getProjects(): Observable<Project[]> {
-    return this.http.get<Project[]>(`${this.apiUrl}/projects`);
-  }
-}
-```
-
-3. Update components to handle Observables with `async` pipe or subscriptions.
-
-### Styling & Theme
-
-The portfolio uses Tailwind CSS v4 with a dark theme:
-- Background: `bg-slate-950`, `bg-slate-900`
-- Text: `text-slate-100`, `text-slate-300`
-- Accent: `text-blue-400`, `bg-blue-600`
-
-To customize colors, modify the Tailwind classes in component templates or extend the theme in `tailwind.config.js`.
-
-### Profile Photo
-
-Update the `photoUrl` in `PortfolioDataService.getProfile()` to point to your photo:
-- Use a local path: `/assets/images/profile.jpg`
-- Or a remote URL: `https://example.com/your-photo.jpg`
-
-### Social Links
-
-Add/remove social links in `getProfile()`:
-
-```typescript
-socialLinks: [
-  { name: 'GitHub', url: 'https://github.com/yourusername', icon: 'GH' },
-  { name: 'LinkedIn', url: 'https://linkedin.com/in/yourusername', icon: 'LI' },
-  { name: 'X', url: 'https://x.com/yourusername', icon: 'X' },
-  { name: 'Email', url: 'mailto:you@example.com', icon: '✉' }
-]
-```
-
-## Build
-
-Build the project for production:
+### Production Build
 
 ```bash
 npm run build
+# or
+ng build --configuration production
 ```
 
-or
+Build artifacts will be in the `dist/` directory.
+
+## 📚 Sections
+
+### Hero Section
+- Name and role
+- Tagline
+- Profile photo
+- Social media links
+- CTA buttons
+
+### About Section
+- Personal bio
+- Education background
+- Technical skills
+- Current job information
+
+### Experience Section
+- Timeline-style work history
+- Job roles and companies
+- Detailed descriptions
+- Date ranges
+
+### Projects Section
+- Project cards with images
+- Technology stacks
+- GitHub/Live/Demo links
+- Project descriptions
+
+### Contact Section
+- Contact information
+- Social media links
+- Quick links
+
+## 🎨 Customization
+
+### Theme Colors
+
+Modify colors in Tailwind configuration (`tailwind.config.js`):
+
+```javascript
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        // Customize colors
+      }
+    }
+  }
+}
+```
+
+### API Endpoint
+
+Change the API URL in environment files to connect to your backend.
+
+### Content
+
+All content is managed through the admin dashboard. Update content there and it will reflect automatically.
+
+## 📁 Project Structure
+
+```
+src/app/portfolio/
+├── portfolio-page/        # Main container
+├── components/
+│   ├── navbar/           # Sticky navigation
+│   ├── hero/             # Hero section
+│   ├── about/            # About section
+│   ├── experience/       # Experience section
+│   │   └── experience-item/
+│   ├── projects/         # Projects section
+│   │   └── project-card/
+│   ├── contact/          # Contact section
+│   └── ui/               # Reusable components
+│       ├── button/
+│       ├── social-icon/
+│       └── back-to-top/
+├── services/
+│   └── portfolio-data.service.ts
+├── models/
+│   └── portfolio.models.ts
+├── directives/
+│   └── reveal-on-scroll.directive.ts
+└── constants/
+    └── theme.constants.ts
+```
+
+## 🔧 Features in Detail
+
+### Scroll Animations
+Components reveal as you scroll using the `RevealOnScrollDirective`:
+- Fade in effect
+- Slide up animation
+- Intersection Observer API
+
+### Social Icons
+Automatic icon detection for:
+- GitHub
+- LinkedIn
+- Instagram
+- CodeChef
+- Custom fallback for others
+
+### Dynamic Favicon
+Favicon is loaded from the backend and updated automatically based on admin configuration.
+
+### Responsive Navigation
+- Sticky navbar
+- Active section highlighting
+- Smooth scroll to sections
+- Mobile-friendly
+
+## 📱 Responsive Design
+
+Optimized breakpoints:
+- **Mobile**: 320px - 767px
+- **Tablet**: 768px - 1023px
+- **Desktop**: 1024px - 1919px
+- **Large Desktop**: 1920px+
+
+## 🧪 Testing
 
 ```bash
-ng build
+# Run unit tests
+ng test
+
+# Run e2e tests
+ng e2e
 ```
 
-The build artifacts will be stored in the `dist/` directory.
+## 🚢 Deployment
 
-## Features Breakdown
+### Netlify
 
-### Navigation
-- Sticky navbar with smooth scroll to sections
-- Active section highlighting
-- Responsive mobile menu
+```bash
+ng build --configuration production
+```
 
-### Animations
-- Scroll-triggered reveal animations using `RevealOnScrollDirective`
-- Intersection Observer API for performance
-- Fade-in and slide-up effects
+Create `netlify.toml`:
+```toml
+[build]
+  command = "ng build --configuration production"
+  publish = "dist/portfolio/browser"
 
-### Back to Top Button
-- Floating rocket button appears after scrolling down 200px
-- Smooth scroll back to top on click
-- Auto-hide when at the top
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
 
-### Contact Form
-- Template-driven form with validation
-- Success message after submission
-- Currently logs to console (ready for backend integration)
+### Vercel
 
-## Technology Stack
+```bash
+ng build --configuration production
+# Deploy using Vercel CLI or GitHub integration
+```
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| Angular | 17.x | Frontend framework |
-| TypeScript | 5.2.x | Type-safe JavaScript |
-| Tailwind CSS | 4.x | Utility-first CSS |
-| RxJS | 7.8.x | Reactive programming |
+### GitHub Pages
 
-## Browser Support
+```bash
+ng build --configuration production --base-href "/your-repo/"
+# Deploy dist/ folder to gh-pages branch
+```
 
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
+### Traditional Hosting
 
-## License
+```bash
+ng build --configuration production
+# Upload dist/portfolio/browser/ to your web server
+```
 
-This project is open source and available under the [MIT License](LICENSE).
+## 🎯 Performance Optimizations
 
-## Contributing
+- **Lazy Loading** - Optimized bundle size
+- **AOT Compilation** - Ahead-of-time compilation
+- **Tree Shaking** - Remove unused code
+- **Minification** - Compressed assets
+- **Image Optimization** - Proper image sizing
+- **CDN Ready** - Static asset deployment
 
-Feel free to fork this project and customize it for your own portfolio!
+## 🔧 Development
 
-## Support
+### Generate Components
 
-For questions or issues, please open an issue on GitHub.
+```bash
+ng generate component portfolio/components/new-component
+```
+
+### Generate Services
+
+```bash
+ng generate service portfolio/services/new-service
+```
+
+### Serve with Custom Port
+
+```bash
+ng serve --port 4300
+```
+
+## 📝 Data Source
+
+The portfolio pulls data from the backend API:
+- Profile information
+- Projects
+- Experience
+- Skills
+- Education
+- Social links
+- Current job
+
+All content is managed through the admin dashboard.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
+
+## 📄 License
+
+This project is open source and available under the MIT License.
+
+## 🐛 Troubleshooting
+
+### Cannot load data
+- Verify backend is running
+- Check API URL in environment files
+- Check browser console for errors
+- Verify CORS settings in backend
+
+### Build errors
+```bash
+# Clear cache and reinstall
+rm -rf node_modules package-lock.json .angular
+npm install
+```
+
+### Animations not working
+- Check if Intersection Observer is supported
+- Verify directive is imported correctly
+- Check browser console for errors
+
+### Favicon not updating
+- Clear browser cache
+- Check favicon URL in backend
+- Verify URL is accessible
+
+## 🎨 Design Credits
+
+- Dark theme with gradient backgrounds
+- Custom animations and transitions
+- Responsive grid layouts
+- Modern card designs
+
+## 📞 Support
+
+For issues and questions, please open an issue on GitHub.
 
 ---
 
 Built with ❤️ using Angular and Tailwind CSS
-
-
-
-
-

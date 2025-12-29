@@ -109,12 +109,30 @@ export class PortfolioPageComponent implements OnInit {
         this.experiences = data.experiences;
         this.projects = data.projects;
         this.isLoading = false;
+        
+        // Update favicon dynamically if available
+        if (this.profile.faviconUrl) {
+          this.updateFavicon(this.profile.faviconUrl);
+        }
       },
       error: (error) => {
         console.error('Error loading portfolio data:', error);
         this.isLoading = false;
       }
     });
+  }
+
+  private updateFavicon(faviconUrl: string): void {
+    // Remove existing favicons
+    const existingIcons = document.querySelectorAll("link[rel*='icon']");
+    existingIcons.forEach(icon => icon.remove());
+    
+    // Add new favicon
+    const link = document.createElement('link');
+    link.rel = 'icon';
+    link.type = 'image/x-icon';
+    link.href = faviconUrl;
+    document.head.appendChild(link);
   }
 }
 
