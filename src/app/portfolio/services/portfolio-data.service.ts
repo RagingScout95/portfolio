@@ -98,10 +98,10 @@ export class PortfolioDataService {
           name: proj.name,
           description: proj.description,
           techStack: proj.techStack || [],
-          liveUrl: proj.liveUrl,
-          githubUrl: proj.githubUrl,
-          demoUrl: proj.demoUrl,
-          imageUrl: proj.imageUrl
+          liveUrl: proj.liveUrl && proj.liveUrl.trim() !== '' ? proj.liveUrl : undefined,
+          githubUrl: proj.githubUrl && proj.githubUrl.trim() !== '' ? proj.githubUrl : undefined,
+          demoUrl: proj.demoUrl && proj.demoUrl.trim() !== '' ? proj.demoUrl : undefined,
+          imageUrl: proj.imageUrl && proj.imageUrl.trim() !== '' ? proj.imageUrl : undefined
         }));
       })
     );

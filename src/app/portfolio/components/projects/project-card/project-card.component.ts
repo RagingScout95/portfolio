@@ -30,14 +30,14 @@ import { Project } from '../../../models/portfolio.models';
       <!-- Action Buttons -->
       <div class="flex gap-3 mt-auto">
         <app-button
-          *ngIf="project.liveUrl"
+          *ngIf="hasLiveUrl()"
           [label]="'Live Demo'"
           [type]="'primary'"
           [isLink]="true"
           [href]="project.liveUrl"
         ></app-button>
         <app-button
-          *ngIf="project.githubUrl"
+          *ngIf="hasGithubUrl()"
           [label]="'GitHub'"
           [type]="'secondary'"
           [isLink]="true"
@@ -50,6 +50,16 @@ import { Project } from '../../../models/portfolio.models';
 })
 export class ProjectCardComponent {
   @Input() project!: Project;
+
+  hasLiveUrl(): boolean {
+    const url = this.project.liveUrl;
+    return !!(url && typeof url === 'string' && url.trim().length > 0);
+  }
+
+  hasGithubUrl(): boolean {
+    const url = this.project.githubUrl;
+    return !!(url && typeof url === 'string' && url.trim().length > 0);
+  }
 }
 
 
