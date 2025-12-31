@@ -2,18 +2,22 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../ui/button/button.component';
 import { SocialIconComponent } from '../ui/social-icon/social-icon.component';
+import { GlitchTextDirective } from '../../directives/glitch-text.directive';
 import { SocialLink } from '../../models/portfolio.models';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, SocialIconComponent],
+  imports: [CommonModule, ButtonComponent, SocialIconComponent, GlitchTextDirective],
   template: `
     <div class="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gradient-to-b from-black via-black to-black px-4 md:px-8 pt-20 md:pt-0">
       <div class="max-w-6xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-12">
         <!-- Left Content -->
         <div class="flex-1 text-center md:text-left space-y-6">
-          <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-100 animate-fade-in">
+          <h1 
+            appGlitchText
+            class="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-100 animate-fade-in"
+          >
             {{ name }}
           </h1>
           <p class="text-2xl md:text-3xl text-red-500 font-semibold">

@@ -30,6 +30,185 @@ body {
   color: #f1f5f9;
 }
 
+/* Glitch Text Directive Styles - minimal impact on layout */
+[appGlitchText] {
+  position: relative;
+}
+
+/* Glitch effect activated via class toggle */
+[appGlitchText].glitch-active {
+  /* Subtle horizontal shift */
+  transform: translateX(1px);
+}
+
+/* Strong glitch effect (RGB split like CodePen) - used after typewriter */
+[appGlitchText].glitch-strong {
+  /* More pronounced RGB split effect with text-shadow - stronger offset */
+  text-shadow: 
+    4px 0 rgba(239, 68, 68, 1),
+    -4px 0 rgba(59, 130, 246, 0.8);
+  animation: glitch-strong-shake 0.03s steps(2, end) infinite;
+}
+
+@keyframes glitch-strong-shake {
+  0% {
+    transform: translate(0);
+    text-shadow: 
+      4px 0 rgba(239, 68, 68, 1),
+      -4px 0 rgba(59, 130, 246, 0.8);
+  }
+  25% {
+    transform: translate(-3px, 2px);
+    text-shadow: 
+      5px 0 rgba(239, 68, 68, 1),
+      -5px 0 rgba(59, 130, 246, 0.9);
+  }
+  50% {
+    transform: translate(3px, -2px);
+    text-shadow: 
+      -4px 0 rgba(239, 68, 68, 1),
+      4px 0 rgba(59, 130, 246, 0.8);
+  }
+  75% {
+    transform: translate(-2px, 1px);
+    text-shadow: 
+      4px 0 rgba(239, 68, 68, 0.9),
+      -4px 0 rgba(59, 130, 246, 0.7);
+  }
+  100% {
+    transform: translate(2px, -1px);
+    text-shadow: 
+      -3px 0 rgba(239, 68, 68, 0.8),
+      3px 0 rgba(59, 130, 246, 0.6);
+  }
+}
+
+/* Red shift layer via ::before */
+[appGlitchText].glitch-active::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 1px;
+  width: 100%;
+  color: rgba(239, 68, 68, 0.6);
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  white-space: nowrap;
+  /* Inherit font properties to match parent text */
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+/* Subtle offset layer via ::after */
+[appGlitchText].glitch-active::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 100%;
+  color: rgba(239, 68, 68, 0.3);
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+  white-space: nowrap;
+  /* Inherit font properties to match parent text */
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+/* Strong glitch RGB split layers - visible red/blue split with more offset */
+[appGlitchText].glitch-strong::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 5px;
+  width: 100%;
+  height: 100%;
+  color: rgba(239, 68, 68, 1);
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  clip-path: inset(0 0 0 0);
+  animation: glitch-red-split 0.03s steps(2, end) infinite;
+}
+
+[appGlitchText].glitch-strong::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: -5px;
+  width: 100%;
+  height: 100%;
+  color: rgba(59, 130, 246, 0.8);
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  clip-path: inset(0 0 0 0);
+  animation: glitch-blue-split 0.03s steps(2, end) infinite;
+}
+
+@keyframes glitch-red-split {
+  0% {
+    transform: translate(0);
+    clip-path: inset(0 0 0 0);
+  }
+  33% {
+    transform: translate(-4px, 3px);
+    clip-path: inset(25% 0 30% 0);
+  }
+  66% {
+    transform: translate(4px, -3px);
+    clip-path: inset(35% 0 20% 0);
+  }
+  100% {
+    transform: translate(0);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes glitch-blue-split {
+  0% {
+    transform: translate(0);
+    clip-path: inset(0 0 0 0);
+  }
+  33% {
+    transform: translate(4px, -3px);
+    clip-path: inset(35% 0 20% 0);
+  }
+  66% {
+    transform: translate(-4px, 3px);
+    clip-path: inset(25% 0 30% 0);
+  }
+  100% {
+    transform: translate(0);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Flicker effect (subtle opacity change) */
+[appGlitchText].glitch-flicker {
+  opacity: 0.95;
+}
+
 
 
 
