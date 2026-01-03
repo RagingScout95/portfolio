@@ -110,8 +110,8 @@ export class PortfolioPageComponent implements OnInit {
         this.projects = data.projects;
         this.isLoading = false;
         
-        // Update document title dynamically
-        document.title = `${this.profile.name} - Portfolio | ragingscout97`;
+        // Update document title dynamically - prioritize ragingscout97 for SEO
+        document.title = `ragingscout97 - Portfolio | ${this.profile.name} | ${this.profile.role}`;
         
         // Update meta description dynamically
         this.updateMetaTags();
@@ -132,25 +132,27 @@ export class PortfolioPageComponent implements OnInit {
   }
 
   private updateMetaTags(): void {
-    // Update meta description
+    // Update meta description - prioritize ragingscout97 for SEO
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
       metaDescription.setAttribute('name', 'description');
       document.head.appendChild(metaDescription);
     }
-    metaDescription.setAttribute('content', `${this.profile.name} (ragingscout97) - ${this.profile.tagline}. ${this.profile.about.substring(0, 100)}...`);
+    metaDescription.setAttribute('content', `ragingscout97 - Portfolio of ${this.profile.name}. ${this.profile.role}. ${this.profile.tagline}. Visit ragingscout97.in`);
 
     // Update Open Graph tags
-    this.updateMetaTag('property', 'og:title', `${this.profile.name} - Portfolio | ragingscout97`);
-    this.updateMetaTag('property', 'og:description', `${this.profile.name} (ragingscout97) - ${this.profile.tagline}`);
+    this.updateMetaTag('property', 'og:title', `ragingscout97 - Portfolio | ${this.profile.name} | ${this.profile.role}`);
+    this.updateMetaTag('property', 'og:description', `ragingscout97 - Portfolio of ${this.profile.name}. ${this.profile.role}. ${this.profile.tagline}. Visit ragingscout97.in`);
+    this.updateMetaTag('property', 'og:url', 'https://ragingscout97.in/');
     if (this.profile.photoUrl) {
       this.updateMetaTag('property', 'og:image', this.profile.photoUrl);
     }
 
     // Update Twitter tags
-    this.updateMetaTag('name', 'twitter:title', `${this.profile.name} - Portfolio | ragingscout97`);
-    this.updateMetaTag('name', 'twitter:description', `${this.profile.name} (ragingscout97) - ${this.profile.tagline}`);
+    this.updateMetaTag('name', 'twitter:title', `ragingscout97 - Portfolio | ${this.profile.name} | ${this.profile.role}`);
+    this.updateMetaTag('name', 'twitter:description', `ragingscout97 - Portfolio of ${this.profile.name}. ${this.profile.role}. Visit ragingscout97.in`);
+    this.updateMetaTag('name', 'twitter:url', 'https://ragingscout97.in/');
     if (this.profile.photoUrl) {
       this.updateMetaTag('name', 'twitter:image', this.profile.photoUrl);
     }
@@ -184,16 +186,20 @@ export class PortfolioPageComponent implements OnInit {
     const existingScripts = document.querySelectorAll('script[type="application/ld+json"]');
     existingScripts.forEach(script => script.remove());
 
-    // Create Person schema with gaming name
+    // Create Person schema with gaming name - prioritize ragingscout97
     const personSchema = {
       '@context': 'https://schema.org',
       '@type': 'Person',
       name: this.profile.name,
       alternateName: 'ragingscout97',
+      brand: {
+        '@type': 'Brand',
+        name: 'ragingscout97'
+      },
       jobTitle: this.profile.role,
-      description: this.profile.tagline,
+      description: `ragingscout97 - ${this.profile.tagline}`,
       image: this.profile.photoUrl,
-      url: window.location.origin,
+      url: 'https://ragingscout97.in',
       sameAs: this.profile.socialLinks.map(link => link.url),
       knowsAbout: this.profile.skills.map(skill => skill.name),
       alumniOf: this.profile.education.map(edu => ({
@@ -207,25 +213,30 @@ export class PortfolioPageComponent implements OnInit {
       } : undefined
     };
 
-    // Create WebSite schema
+    // Create WebSite schema - emphasize ragingscout97
     const websiteSchema = {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
-      name: `${this.profile.name} - Portfolio | ragingscout97`,
-      alternateName: 'ragingscout97 Portfolio',
-      description: this.profile.tagline,
-      url: window.location.origin,
+      name: 'ragingscout97',
+      alternateName: ['ragingscout97.in', `${this.profile.name} Portfolio`],
+      description: `ragingscout97 - ${this.profile.tagline}`,
+      url: 'https://ragingscout97.in',
       author: {
         '@type': 'Person',
         name: this.profile.name,
         alternateName: 'ragingscout97'
+      },
+      publisher: {
+        '@type': 'Person',
+        name: 'ragingscout97',
+        alternateName: this.profile.name
       },
       inLanguage: 'en-US',
       potentialAction: {
         '@type': 'SearchAction',
         target: {
           '@type': 'EntryPoint',
-          urlTemplate: window.location.origin + '/search?q={search_term_string}'
+          urlTemplate: 'https://ragingscout97.in/search?q={search_term_string}'
         },
         'query-input': 'required name=search_term_string'
       }
@@ -235,9 +246,9 @@ export class PortfolioPageComponent implements OnInit {
     const portfolioSchema = {
       '@context': 'https://schema.org',
       '@type': 'CreativeWork',
-      '@id': window.location.origin + '/#portfolio',
-      name: `${this.profile.name} - Portfolio`,
-      alternateName: 'ragingscout97 Portfolio',
+      '@id': 'https://ragingscout97.in/#portfolio',
+      name: 'ragingscout97 Portfolio',
+      alternateName: `${this.profile.name} Portfolio`,
       description: this.profile.about,
       creator: {
         '@type': 'Person',
@@ -251,7 +262,8 @@ export class PortfolioPageComponent implements OnInit {
       inLanguage: 'en-US',
       copyrightHolder: {
         '@type': 'Person',
-        name: this.profile.name
+        name: 'ragingscout97',
+        alternateName: this.profile.name
       }
     };
 
