@@ -110,16 +110,60 @@ export class PortfolioPageComponent implements OnInit {
         this.projects = data.projects;
         this.isLoading = false;
         
+        // Update document title dynamically
+        document.title = `${this.profile.name} - Portfolio | ragingscout97`;
+        
+        // Update meta description dynamically
+        this.updateMetaTags();
+        
         // Update favicon dynamically if available
         if (this.profile.faviconUrl) {
           this.updateFavicon(this.profile.faviconUrl);
         }
+        
+        // Add structured data for SEO
+        this.addStructuredData();
       },
       error: (error) => {
         console.error('Error loading portfolio data:', error);
         this.isLoading = false;
       }
     });
+  }
+
+  private updateMetaTags(): void {
+    // Update meta description
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.setAttribute('name', 'description');
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.setAttribute('content', `${this.profile.name} (ragingscout97) - ${this.profile.tagline}. ${this.profile.about.substring(0, 100)}...`);
+
+    // Update Open Graph tags
+    this.updateMetaTag('property', 'og:title', `${this.profile.name} - Portfolio | ragingscout97`);
+    this.updateMetaTag('property', 'og:description', `${this.profile.name} (ragingscout97) - ${this.profile.tagline}`);
+    if (this.profile.photoUrl) {
+      this.updateMetaTag('property', 'og:image', this.profile.photoUrl);
+    }
+
+    // Update Twitter tags
+    this.updateMetaTag('name', 'twitter:title', `${this.profile.name} - Portfolio | ragingscout97`);
+    this.updateMetaTag('name', 'twitter:description', `${this.profile.name} (ragingscout97) - ${this.profile.tagline}`);
+    if (this.profile.photoUrl) {
+      this.updateMetaTag('name', 'twitter:image', this.profile.photoUrl);
+    }
+  }
+
+  private updateMetaTag(attribute: string, value: string, content: string): void {
+    let meta = document.querySelector(`meta[${attribute}="${value}"]`);
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute(attribute, value);
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute('content', content);
   }
 
   private updateFavicon(faviconUrl: string): void {
@@ -133,6 +177,105 @@ export class PortfolioPageComponent implements OnInit {
     link.type = 'image/x-icon';
     link.href = faviconUrl;
     document.head.appendChild(link);
+  }
+
+  private addStructuredData(): void {
+    // Remove existing structured data
+    const existingScripts = document.querySelectorAll('script[type="application/ld+json"]');
+    existingScripts.forEach(script => script.remove());
+
+    // Create Person schema with gaming name
+    const personSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: this.profile.name,
+      alternateName: 'ragingscout97',
+      jobTitle: this.profile.role,
+      description: this.profile.tagline,
+      image: this.profile.photoUrl,
+      url: window.location.origin,
+      sameAs: this.profile.socialLinks.map(link => link.url),
+      knowsAbout: this.profile.skills.map(skill => skill.name),
+      alumniOf: this.profile.education.map(edu => ({
+        '@type': 'EducationalOrganization',
+        name: edu.institute
+      })),
+      worksFor: this.profile.currentJob ? {
+        '@type': 'Organization',
+        name: this.profile.currentJob.company,
+        jobTitle: this.profile.currentJob.title
+      } : undefined
+    };
+
+    // Create WebSite schema
+    const websiteSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: `${this.profile.name} - Portfolio | ragingscout97`,
+      alternateName: 'ragingscout97 Portfolio',
+      description: this.profile.tagline,
+      url: window.location.origin,
+      author: {
+        '@type': 'Person',
+        name: this.profile.name,
+        alternateName: 'ragingscout97'
+      },
+      inLanguage: 'en-US',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: window.location.origin + '/search?q={search_term_string}'
+        },
+        'query-input': 'required name=search_term_string'
+      }
+    };
+
+    // Create Portfolio schema
+    const portfolioSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'CreativeWork',
+      '@id': window.location.origin + '/#portfolio',
+      name: `${this.profile.name} - Portfolio`,
+      alternateName: 'ragingscout97 Portfolio',
+      description: this.profile.about,
+      creator: {
+        '@type': 'Person',
+        name: this.profile.name,
+        alternateName: 'ragingscout97'
+      },
+      about: {
+        '@type': 'Thing',
+        name: 'Software Development Portfolio'
+      },
+      inLanguage: 'en-US',
+      copyrightHolder: {
+        '@type': 'Person',
+        name: this.profile.name
+      }
+    };
+
+    // Create ProfilePage schema
+    const profilePageSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'ProfilePage',
+      mainEntity: {
+        '@type': 'Person',
+        name: this.profile.name,
+        alternateName: 'ragingscout97',
+        jobTitle: this.profile.role,
+        description: this.profile.tagline,
+        image: this.profile.photoUrl
+      }
+    };
+
+    // Inject all schemas
+    [personSchema, websiteSchema, portfolioSchema, profilePageSchema].forEach(schema => {
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.text = JSON.stringify(schema);
+      document.head.appendChild(script);
+    });
   }
 }
 

@@ -67,7 +67,11 @@ import { CanvasGameService } from '../../core/canvas-game/canvas-game.service';
             <div class="absolute inset-0 bg-red-600 rounded-full blur-3xl opacity-20"></div>
             <img
               [src]="photoUrl"
-              [alt]="name"
+              [alt]="name + ' - ' + role"
+              loading="eager"
+              fetchpriority="high"
+              width="384"
+              height="384"
               class="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full object-cover border-4 border-red-600 shadow-2xl shadow-red-600/50"
             />
           </div>
@@ -105,15 +109,28 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    // Initialize canvas game after view is ready
+    // Defer canvas game initialization to improve initial load performance
+    // Use requestIdleCallback if available, otherwise use a longer timeout
     if (this.canvasRef?.nativeElement && this.sectionRef?.nativeElement) {
-      // Small delay to ensure DOM is fully ready
-      setTimeout(() => {
-        this.canvasGameService.init(
-          this.canvasRef.nativeElement,
-          this.sectionRef.nativeElement
-        );
-      }, 100);
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => {
+          this.initializeCanvasGame();
+        }, { timeout: 2000 });
+      } else {
+        // Fallback for browsers without requestIdleCallback
+        setTimeout(() => {
+          this.initializeCanvasGame();
+        }, 500);
+      }
+    }
+  }
+
+  private initializeCanvasGame(): void {
+    if (this.canvasRef?.nativeElement && this.sectionRef?.nativeElement) {
+      this.canvasGameService.init(
+        this.canvasRef.nativeElement,
+        this.sectionRef.nativeElement
+      );
     }
   }
 
