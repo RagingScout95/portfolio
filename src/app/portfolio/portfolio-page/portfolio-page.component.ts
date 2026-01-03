@@ -182,112 +182,22 @@ export class PortfolioPageComponent implements OnInit {
   }
 
   private addStructuredData(): void {
-    // Remove existing structured data
-    const existingScripts = document.querySelectorAll('script[type="application/ld+json"]');
-    existingScripts.forEach(script => script.remove());
-
-    // Create Person schema with gaming name - prioritize ragingscout97
-    const personSchema = {
-      '@context': 'https://schema.org',
-      '@type': 'Person',
-      name: this.profile.name,
-      alternateName: 'ragingscout97',
-      brand: {
-        '@type': 'Brand',
-        name: 'ragingscout97'
-      },
-      jobTitle: this.profile.role,
-      description: `ragingscout97 - ${this.profile.tagline}`,
-      image: this.profile.photoUrl,
-      url: 'https://ragingscout97.in',
-      sameAs: this.profile.socialLinks.map(link => link.url),
-      knowsAbout: this.profile.skills.map(skill => skill.name),
-      alumniOf: this.profile.education.map(edu => ({
-        '@type': 'EducationalOrganization',
-        name: edu.institute
-      })),
-      worksFor: this.profile.currentJob ? {
-        '@type': 'Organization',
-        name: this.profile.currentJob.company,
-        jobTitle: this.profile.currentJob.title
-      } : undefined
-    };
-
-    // Create WebSite schema - emphasize ragingscout97
-    const websiteSchema = {
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      name: 'ragingscout97',
-      alternateName: ['ragingscout97.in', `${this.profile.name} Portfolio`],
-      description: `ragingscout97 - ${this.profile.tagline}`,
-      url: 'https://ragingscout97.in',
-      author: {
-        '@type': 'Person',
-        name: this.profile.name,
-        alternateName: 'ragingscout97'
-      },
-      publisher: {
-        '@type': 'Person',
-        name: 'ragingscout97',
-        alternateName: this.profile.name
-      },
-      inLanguage: 'en-US',
-      potentialAction: {
-        '@type': 'SearchAction',
-        target: {
-          '@type': 'EntryPoint',
-          urlTemplate: 'https://ragingscout97.in/search?q={search_term_string}'
-        },
-        'query-input': 'required name=search_term_string'
+    // Update the existing Person schema in HTML with dynamic data if needed
+    // The main structured data is already in index.html for better SEO
+    // This method can be used to enhance it with dynamic profile data if required
+    const existingScript = document.querySelector('script[type="application/ld+json"]');
+    if (existingScript && this.profile.photoUrl) {
+      try {
+        const schema = JSON.parse(existingScript.textContent || '{}');
+        // Update image if profile has a photo
+        if (this.profile.photoUrl && schema.image) {
+          schema.image = this.profile.photoUrl;
+          existingScript.textContent = JSON.stringify(schema);
+        }
+      } catch (e) {
+        console.warn('Could not update structured data:', e);
       }
-    };
-
-    // Create Portfolio schema
-    const portfolioSchema = {
-      '@context': 'https://schema.org',
-      '@type': 'CreativeWork',
-      '@id': 'https://ragingscout97.in/#portfolio',
-      name: 'ragingscout97 Portfolio',
-      alternateName: `${this.profile.name} Portfolio`,
-      description: this.profile.about,
-      creator: {
-        '@type': 'Person',
-        name: this.profile.name,
-        alternateName: 'ragingscout97'
-      },
-      about: {
-        '@type': 'Thing',
-        name: 'Software Development Portfolio'
-      },
-      inLanguage: 'en-US',
-      copyrightHolder: {
-        '@type': 'Person',
-        name: 'ragingscout97',
-        alternateName: this.profile.name
-      }
-    };
-
-    // Create ProfilePage schema
-    const profilePageSchema = {
-      '@context': 'https://schema.org',
-      '@type': 'ProfilePage',
-      mainEntity: {
-        '@type': 'Person',
-        name: this.profile.name,
-        alternateName: 'ragingscout97',
-        jobTitle: this.profile.role,
-        description: this.profile.tagline,
-        image: this.profile.photoUrl
-      }
-    };
-
-    // Inject all schemas
-    [personSchema, websiteSchema, portfolioSchema, profilePageSchema].forEach(schema => {
-      const script = document.createElement('script');
-      script.type = 'application/ld+json';
-      script.text = JSON.stringify(schema);
-      document.head.appendChild(script);
-    });
+    }
   }
 }
 
