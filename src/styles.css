@@ -30,6 +30,12 @@ body {
   color: #f1f5f9;
 }
 
+/* Hide native cursor everywhere when rocket cursor overlay is active (desktop game) */
+.rocket-cursor-active,
+.rocket-cursor-active * {
+  cursor: none !important;
+}
+
 /* Glitch Text Directive Styles - minimal impact on layout */
 [appGlitchText] {
   position: relative;

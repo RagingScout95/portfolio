@@ -39,11 +39,14 @@ export class CanvasGameEngine {
   
   // Visibility state
   private isVisible: boolean = true;
+
+  /** Called on every mousemove so overlay cursor uses same position as bullet (single source of truth) */
+  private onGlobalMouseMove: ((clientX: number, clientY: number) => void) | null = null;
   
   /**
    * Initialize the engine with canvas and mode
    */
-  init(canvas: HTMLCanvasElement, mode: GameMode): void {
+  init(canvas: HTMLCanvasElement, mode: GameMode, options?: { onGlobalMouseMove?: (clientX: number, clientY: number) => void }): void {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d', { alpha: true });
     this.mode = mode;
@@ -52,6 +55,8 @@ export class CanvasGameEngine {
       console.error('Failed to get 2d context');
       return;
     }
+
+    this.onGlobalMouseMove = options?.onGlobalMouseMove ?? null;
     
     // Initialize object pools
     this.initializePools();
@@ -123,10 +128,6 @@ export class CanvasGameEngine {
     const handleMouseMove = (e: MouseEvent) => {
       if (!this.canvas) return;
       
-      // Store global mouse position for rocket cursor everywhere
-      this.globalMouseX = e.clientX;
-      this.globalMouseY = e.clientY;
-      
       const rect = this.canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -148,6 +149,14 @@ export class CanvasGameEngine {
         this.rocketX = Math.max(0, Math.min(rect.width, x));
         this.rocketY = Math.max(0, Math.min(rect.height, y));
       }
+      
+      // Store global mouse position
+      this.globalMouseX = e.clientX;
+      this.globalMouseY = e.clientY;
+      // Over hero: use bullet viewport position so triangle and bullet align. Else: use actual mouse so cursor follows everywhere when scrolling.
+      const cursorX = this.isMouseOverCanvas ? rect.left + this.rocketX : e.clientX;
+      const cursorY = this.isMouseOverCanvas ? rect.top + this.rocketY : e.clientY;
+      this.onGlobalMouseMove?.(cursorX, cursorY);
     };
     
     const handleMouseDown = () => {

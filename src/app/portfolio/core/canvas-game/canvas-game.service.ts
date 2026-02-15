@@ -45,9 +45,11 @@ export class CanvasGameService implements OnDestroy {
     const mode = this.detectGameMode();
     console.log('[CanvasGame] Initializing with mode:', mode, 'Canvas size:', rect.width, 'x', rect.height);
     
-    // Initialize engine
+    // Initialize engine (pass callback so overlay cursor uses same position as bullet)
     this.engine = new CanvasGameEngine();
-    this.engine.init(canvas, mode);
+    this.engine.init(canvas, mode, {
+      onGlobalMouseMove: (clientX, clientY) => this.globalRocketCursor.setPosition(clientX, clientY)
+    });
     
     // Setup resize observer
     this.setupResizeObserver(canvas, container);

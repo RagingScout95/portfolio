@@ -15,6 +15,14 @@ export class GlobalRocketCursorService implements OnDestroy {
   private mouseY: number = 0;
   private rocketSize: number = 16;
   private animationFrameId: number | null = null;
+
+  /**
+   * Set cursor position (called from game engine so overlay and bullet use same source)
+   */
+  setPosition(clientX: number, clientY: number): void {
+    this.mouseX = clientX;
+    this.mouseY = clientY;
+  }
   
   /**
    * Initialize global rocket cursor
@@ -39,11 +47,10 @@ export class GlobalRocketCursorService implements OnDestroy {
     // Create overlay canvas
     this.createOverlayCanvas();
     
-    // Hide native cursor
-    document.body.style.cursor = 'none';
+    // Hide native cursor on entire document (including buttons/links)
+    document.documentElement.classList.add('rocket-cursor-active');
     
-    // Setup mouse tracking
-    this.setupMouseTracking();
+    // Position is driven by game engine via setPosition() so overlay and bullet align
     
     // Start render loop
     this.isActive = true;
@@ -78,28 +85,13 @@ export class GlobalRocketCursorService implements OnDestroy {
   }
   
   /**
-   * Resize canvas to match viewport
+   * Resize canvas to match viewport (CSS pixels - same as game canvas)
    */
   private resize(): void {
     if (!this.overlayCanvas) return;
     
     this.overlayCanvas.width = window.innerWidth;
     this.overlayCanvas.height = window.innerHeight;
-  }
-  
-  /**
-   * Setup mouse tracking
-   */
-  private setupMouseTracking(): void {
-    const handleMouseMove = (e: MouseEvent) => {
-      this.mouseX = e.clientX;
-      this.mouseY = e.clientY;
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    
-    // Store for cleanup
-    (this.overlayCanvas as any)._mouseMoveHandler = handleMouseMove;
   }
   
   /**
@@ -111,16 +103,15 @@ export class GlobalRocketCursorService implements OnDestroy {
     // Clear canvas
     this.ctx.clearRect(0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
     
-    // Draw rocket (theme red)
     this.ctx.save();
     this.ctx.globalAlpha = 0.50;
     this.ctx.fillStyle = '#ef4444'; // red-500 (theme color)
     
-    // Simple triangle rocket pointing up
+    // Simple triangle rocket: tip at actual pointer so click/hover and bullet align
     this.ctx.beginPath();
-    this.ctx.moveTo(this.mouseX, this.mouseY - this.rocketSize);
-    this.ctx.lineTo(this.mouseX - this.rocketSize / 2, this.mouseY);
-    this.ctx.lineTo(this.mouseX + this.rocketSize / 2, this.mouseY);
+    this.ctx.moveTo(this.mouseX, this.mouseY);
+    this.ctx.lineTo(this.mouseX - this.rocketSize / 2, this.mouseY + this.rocketSize);
+    this.ctx.lineTo(this.mouseX + this.rocketSize / 2, this.mouseY + this.rocketSize);
     this.ctx.closePath();
     this.ctx.fill();
     
@@ -148,21 +139,13 @@ export class GlobalRocketCursorService implements OnDestroy {
       this.animationFrameId = null;
     }
     
-    // Remove event listeners
-    if (this.overlayCanvas) {
-      const canvas = this.overlayCanvas as any;
-      if (canvas._mouseMoveHandler) {
-        window.removeEventListener('mousemove', canvas._mouseMoveHandler);
-      }
-    }
-    
     // Remove canvas
     if (this.overlayCanvas && this.overlayCanvas.parentNode) {
       this.overlayCanvas.parentNode.removeChild(this.overlayCanvas);
     }
     
-    // Restore cursor
-    document.body.style.cursor = '';
+    // Restore native cursor
+    document.documentElement.classList.remove('rocket-cursor-active');
     
     this.overlayCanvas = null;
     this.ctx = null;
