@@ -5,13 +5,12 @@ import { NavbarComponent, NavSection } from '../components/navbar/navbar.compone
 import { HeroComponent } from '../components/hero/hero.component';
 import { AboutComponent } from '../components/about/about.component';
 import { SkillsComponent } from '../components/skills/skills.component';
-import { ExperienceComponent } from '../components/experience/experience.component';
 import { ProjectsComponent } from '../components/projects/projects.component';
 import { ContactComponent } from '../components/contact/contact.component';
 import { BackToTopComponent } from '../components/ui/back-to-top/back-to-top.component';
 import { RevealOnScrollDirective } from '../directives/reveal-on-scroll.directive';
 import { PortfolioDataService } from '../services/portfolio-data.service';
-import { Profile, Experience, Project } from '../models/portfolio.models';
+import { Profile, Project } from '../models/portfolio.models';
 
 @Component({
   selector: 'app-portfolio-page',
@@ -22,7 +21,6 @@ import { Profile, Experience, Project } from '../models/portfolio.models';
     HeroComponent,
     AboutComponent,
     SkillsComponent,
-    ExperienceComponent,
     ProjectsComponent,
     ContactComponent,
     BackToTopComponent,
@@ -41,7 +39,10 @@ import { Profile, Experience, Project } from '../models/portfolio.models';
       <!-- Main Content -->
       <div *ngIf="!isLoading">
         <!-- Navbar -->
-        <app-navbar [sections]="sections"></app-navbar>
+        <app-navbar
+          [sections]="sections"
+          [faviconUrl]="profile.faviconUrl"
+        ></app-navbar>
         
         <main>
           <!-- Hero Section -->
@@ -57,17 +58,17 @@ import { Profile, Experience, Project } from '../models/portfolio.models';
           
           <!-- About Section -->
           <section id="about" appRevealOnScroll>
-            <app-about [profile]="profile" [experiences]="experiences"></app-about>
+            <app-about [profile]="profile" mode="about-only"></app-about>
+          </section>
+
+          <!-- Timeline Section (Education & Career) -->
+          <section id="timeline" appRevealOnScroll>
+            <app-about [profile]="profile" mode="timeline-only"></app-about>
           </section>
           
           <!-- Skills Section -->
           <section id="skills" appRevealOnScroll>
             <app-skills [skills]="profile.skills"></app-skills>
-          </section>
-          
-          <!-- Experience Section -->
-          <section id="experience" appRevealOnScroll>
-            <app-experience [experiences]="experiences"></app-experience>
           </section>
           
           <!-- Projects Section -->
@@ -90,15 +91,14 @@ import { Profile, Experience, Project } from '../models/portfolio.models';
 })
 export class PortfolioPageComponent implements OnInit {
   profile!: Profile;
-  experiences: Experience[] = [];
   projects: Project[] = [];
   isLoading = true;
 
   sections: NavSection[] = [
     { id: 'hero', label: 'Home' },
     { id: 'about', label: 'About' },
+    { id: 'timeline', label: 'Timeline' },
     { id: 'skills', label: 'Skills' },
-    { id: 'experience', label: 'Experience' },
     { id: 'projects', label: 'Projects' },
     { id: 'contact', label: 'Contact' }
   ];
@@ -109,12 +109,10 @@ export class PortfolioPageComponent implements OnInit {
     // Load data from service
     forkJoin({
       profile: this.portfolioDataService.getProfileWithSkills(),
-      experiences: this.portfolioDataService.getExperiences(),
       projects: this.portfolioDataService.getProjects()
     }).subscribe({
       next: (data) => {
         this.profile = data.profile;
-        this.experiences = data.experiences;
         this.projects = data.projects;
         this.isLoading = false;
         
