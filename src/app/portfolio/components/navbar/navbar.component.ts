@@ -19,9 +19,17 @@ export interface NavSection {
             <a
               href="#hero"
               (click)="scrollToSection($event, 'hero')"
-              class="text-2xl font-bold text-red-500 hover:text-red-400 transition"
+              class="flex items-center gap-2 text-2xl font-bold tracking-tight transition group"
             >
-              Portfolio
+              <img
+                *ngIf="faviconUrl"
+                [src]="faviconUrl"
+                [alt]="brandText"
+                class="w-8 h-8 rounded object-contain"
+              />
+              <span class="bg-gradient-to-r from-red-500 to-red-400 bg-clip-text text-transparent group-hover:from-red-400 group-hover:to-red-300 transition-all">
+                {{ brandText }}
+              </span>
             </a>
           </div>
           
@@ -95,6 +103,8 @@ export interface NavSection {
 })
 export class NavbarComponent {
   @Input() sections: NavSection[] = [];
+  @Input() brandText: string = 'Portfolio';
+  @Input() faviconUrl?: string;
   
   activeSection = 'hero';
   mobileMenuOpen = false;
