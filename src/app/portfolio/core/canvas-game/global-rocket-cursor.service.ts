@@ -50,7 +50,8 @@ export class GlobalRocketCursorService implements OnDestroy {
     // Hide native cursor on entire document (including buttons/links)
     document.documentElement.classList.add('rocket-cursor-active');
     
-    // Position is driven by game engine via setPosition() so overlay and bullet align
+    // Fallback: update position from window mousemove so cursor is visible before first engine callback
+    this.setupFallbackMouseTracking();
     
     // Start render loop
     this.isActive = true;
@@ -84,6 +85,17 @@ export class GlobalRocketCursorService implements OnDestroy {
     window.addEventListener('resize', () => this.resize());
   }
   
+  /**
+   * Fallback mousemove so overlay gets position even before engine fires (cursor visible immediately)
+   */
+  private setupFallbackMouseTracking(): void {
+    const handler = (e: MouseEvent) => {
+      this.setPosition(e.clientX, e.clientY);
+    };
+    window.addEventListener('mousemove', handler);
+    (this.overlayCanvas as any)._fallbackMouseHandler = handler;
+  }
+
   /**
    * Resize canvas to match viewport (CSS pixels - same as game canvas)
    */
@@ -137,6 +149,14 @@ export class GlobalRocketCursorService implements OnDestroy {
     if (this.animationFrameId !== null) {
       cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = null;
+    }
+    
+    // Remove fallback mousemove
+    if (this.overlayCanvas) {
+      const canvas = this.overlayCanvas as any;
+      if (canvas._fallbackMouseHandler) {
+        window.removeEventListener('mousemove', canvas._fallbackMouseHandler);
+      }
     }
     
     // Remove canvas

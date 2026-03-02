@@ -4,6 +4,7 @@ import { forkJoin } from 'rxjs';
 import { NavbarComponent, NavSection } from '../components/navbar/navbar.component';
 import { HeroComponent } from '../components/hero/hero.component';
 import { AboutComponent } from '../components/about/about.component';
+import { SkillsComponent } from '../components/skills/skills.component';
 import { ExperienceComponent } from '../components/experience/experience.component';
 import { ProjectsComponent } from '../components/projects/projects.component';
 import { ContactComponent } from '../components/contact/contact.component';
@@ -20,6 +21,7 @@ import { Profile, Experience, Project } from '../models/portfolio.models';
     NavbarComponent,
     HeroComponent,
     AboutComponent,
+    SkillsComponent,
     ExperienceComponent,
     ProjectsComponent,
     ContactComponent,
@@ -55,7 +57,12 @@ import { Profile, Experience, Project } from '../models/portfolio.models';
           
           <!-- About Section -->
           <section id="about" appRevealOnScroll>
-            <app-about [profile]="profile"></app-about>
+            <app-about [profile]="profile" [experiences]="experiences"></app-about>
+          </section>
+          
+          <!-- Skills Section -->
+          <section id="skills" appRevealOnScroll>
+            <app-skills [skills]="profile.skills"></app-skills>
           </section>
           
           <!-- Experience Section -->
@@ -90,6 +97,7 @@ export class PortfolioPageComponent implements OnInit {
   sections: NavSection[] = [
     { id: 'hero', label: 'Home' },
     { id: 'about', label: 'About' },
+    { id: 'skills', label: 'Skills' },
     { id: 'experience', label: 'Experience' },
     { id: 'projects', label: 'Projects' },
     { id: 'contact', label: 'Contact' }
