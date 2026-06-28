@@ -18,41 +18,34 @@ export interface TimelineItem {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28">
+    <div class="max-w-6xl mx-auto px-4 md:px-8 py-12 w-full">
       <ng-container *ngIf="mode !== 'timeline-only'">
-        <div class="text-center mb-12">
-          <p class="section-label">About</p>
-          <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-100">About Me</h2>
+        <div class="text-center mb-8">
+          <p class="hud-title">⟨ Personnel File ⟩</p>
+          <h2 class="hud-heading mt-2">About Me</h2>
         </div>
-        <div class="glass-card max-w-3xl mx-auto p-8 md:p-10" [class.mb-16]="mode === 'full'">
+        <div class="hud-panel p-8 md:p-10 max-w-3xl mx-auto" [class.mb-12]="mode === 'full'">
           <p class="text-slate-300 leading-relaxed text-lg">{{ profile.about }}</p>
         </div>
       </ng-container>
 
       <div *ngIf="(mode === 'timeline-only' || mode === 'full') && timelineItems.length">
-        <div class="text-center mb-12">
-          <p class="section-label">Journey</p>
-          <h2 [class]="mode === 'timeline-only' ? 'text-3xl md:text-4xl font-bold tracking-tight text-slate-100' : 'text-2xl md:text-3xl font-bold text-slate-100'">
-            Education & Career
-          </h2>
+        <div class="text-center mb-8">
+          <p class="hud-title">⟨ Mission Log ⟩</p>
+          <h2 class="hud-heading mt-2">Education & Career</h2>
         </div>
-
-        <div class="max-w-2xl mx-auto space-y-6">
-          <div
-            *ngFor="let item of timelineItems; let i = index"
-            class="glass-card p-6 hover:border-indigo-500/30 transition-all duration-300 stagger-item"
-            [style.animation-delay.ms]="i * 60"
-          >
-            <div class="flex flex-wrap items-center gap-2 mb-3">
-              <span class="text-xs font-semibold uppercase tracking-wider text-indigo-400">
+        <div class="max-w-2xl mx-auto space-y-4">
+          <div *ngFor="let item of timelineItems; let i = index" class="hud-panel p-6 stagger-item" [style.animation-delay.ms]="i * 60">
+            <div class="flex flex-wrap items-center gap-2 mb-2">
+              <span class="text-xs font-[Rajdhani] font-bold uppercase tracking-wider text-teal-400">
                 {{ item.type === 'education' ? 'Education' : 'Current Role' }}
               </span>
               <span class="text-slate-600">·</span>
-              <span class="text-xs text-slate-500">{{ item.dateLabel }}</span>
+              <span class="text-xs text-slate-500 font-mono">{{ item.dateLabel }}</span>
             </div>
-            <h4 class="text-lg font-semibold text-slate-100 mb-1">{{ item.title }}</h4>
-            <p class="text-slate-400 mb-2">{{ item.subtitle }}</p>
-            <p class="text-sm text-slate-500 leading-relaxed" *ngIf="item.description">{{ item.description }}</p>
+            <h4 class="text-lg font-semibold text-slate-100">{{ item.title }}</h4>
+            <p class="text-slate-400">{{ item.subtitle }}</p>
+            <p class="text-sm text-slate-500 mt-2" *ngIf="item.description">{{ item.description }}</p>
           </div>
         </div>
       </div>

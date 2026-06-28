@@ -2,9 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --cockpit-bg: #070b12;
+  --cockpit-panel: rgba(8, 16, 28, 0.85);
+  --neon-cyan: #5eead4;
+  --neon-cyan-dim: rgba(94, 234, 212, 0.35);
+  --neon-amber: #fbbf24;
+  --neon-crimson: #f43f5e;
+  --hud-text: #cbd5e1;
+  --hud-muted: #64748b;
+  --hud-border: rgba(94, 234, 212, 0.25);
+}
+
 @layer base {
   *, ::before, ::after {
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--hud-border);
   }
 
   html {
@@ -13,29 +25,105 @@
 
   body {
     font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--cockpit-bg);
+    color: var(--hud-text);
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: #020617;
-    color: #f1f5f9;
+    overflow-x: hidden;
   }
 }
 
 @layer components {
-  .glass-card {
-    @apply bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-2xl;
+  .cockpit-bg {
+    background-color: var(--cockpit-bg);
   }
 
-  .hero-mesh {
-    background-color: #020617;
-    background-image:
-      radial-gradient(at 20% 30%, rgba(99, 102, 241, 0.18) 0, transparent 50%),
-      radial-gradient(at 80% 20%, rgba(139, 92, 246, 0.15) 0, transparent 45%),
-      radial-gradient(at 60% 80%, rgba(59, 130, 246, 0.1) 0, transparent 50%),
-      radial-gradient(at 10% 90%, rgba(168, 85, 247, 0.08) 0, transparent 40%);
+  .hud-panel {
+    @apply relative backdrop-blur-md rounded-lg;
+    background: var(--cockpit-panel);
+    border: 1px solid var(--hud-border);
+    box-shadow: 0 0 30px rgba(94, 234, 212, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
 
-  .section-label {
-    @apply text-xs font-semibold uppercase tracking-widest text-indigo-400 mb-3;
+  .hud-panel::before,
+  .hud-panel::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: var(--neon-cyan-dim);
+    border-style: solid;
+    pointer-events: none;
+  }
+
+  .hud-panel::before {
+    top: -1px;
+    left: -1px;
+    border-width: 2px 0 0 2px;
+  }
+
+  .hud-panel::after {
+    bottom: -1px;
+    right: -1px;
+    border-width: 0 2px 2px 0;
+  }
+
+  .hud-title {
+    font-family: 'Rajdhani', sans-serif;
+    @apply text-xs font-bold uppercase tracking-[0.25em];
+    color: var(--neon-cyan);
+  }
+
+  .hud-heading {
+    font-family: 'Rajdhani', sans-serif;
+    @apply text-3xl md:text-4xl font-bold uppercase tracking-wide;
+    color: #e2e8f0;
+  }
+
+  .neon-text {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px rgba(94, 234, 212, 0.35);
+  }
+
+  .hud-btn {
+    font-family: 'Rajdhani', sans-serif;
+    @apply px-5 py-2.5 text-sm font-bold uppercase tracking-widest transition-all duration-300;
+    border: 1px solid var(--hud-border);
+    color: var(--neon-cyan);
+    background: rgba(94, 234, 212, 0.05);
+  }
+
+  .hud-btn:hover {
+    background: rgba(94, 234, 212, 0.12);
+    box-shadow: 0 0 20px rgba(94, 234, 212, 0.15);
+    transform: translateY(-1px);
+  }
+
+  .hud-btn-primary {
+    border-color: rgba(244, 63, 94, 0.5);
+    color: #fecdd3;
+    background: rgba(244, 63, 94, 0.12);
+  }
+
+  .hud-btn-primary:hover {
+    background: rgba(244, 63, 94, 0.22);
+    box-shadow: 0 0 20px rgba(244, 63, 94, 0.2);
+  }
+
+  .section-snap {
+    scroll-snap-align: start;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .crt-scanlines {
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.12) 0px,
+      rgba(0, 0, 0, 0.12) 1px,
+      transparent 1px,
+      transparent 3px
+    );
   }
 
   .stagger-item {
@@ -45,29 +133,15 @@
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
+  html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-
-  .stagger-item {
-    opacity: 1;
-    animation: none;
-  }
+  .stagger-item { opacity: 1; animation: none; }
 }

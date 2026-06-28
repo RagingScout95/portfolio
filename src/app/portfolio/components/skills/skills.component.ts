@@ -7,27 +7,20 @@ import { Skill } from '../../models/portfolio.models';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28">
-      <div class="text-center mb-12">
-        <p class="section-label">Expertise</p>
-        <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-100">Skills & Technologies</h2>
-        <p class="text-slate-400 mt-4 max-w-xl mx-auto">Tools and technologies I work with to build reliable software.</p>
+    <div class="max-w-6xl mx-auto px-4 md:px-8 py-12 w-full">
+      <div class="text-center mb-8">
+        <p class="hud-title">⟨ Installed Modules ⟩</p>
+        <h2 class="hud-heading mt-2">Skills</h2>
       </div>
-
-      <div class="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto" *ngIf="skills.length; else noSkills">
+      <div class="flex flex-wrap justify-center gap-2 max-w-4xl mx-auto" *ngIf="skills.length; else noSkills">
         <span
           *ngFor="let skill of skills; let i = index"
-          class="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-slate-200 hover:border-indigo-500/40 hover:bg-indigo-500/10 transition-all duration-300 stagger-item"
-          [style.animation-delay.ms]="i * 50"
-        >
-          {{ skill.name }}
-        </span>
+          class="font-mono text-xs px-3 py-2 border border-teal-500/25 bg-teal-500/5 text-teal-200/90 stagger-item"
+          [style.animation-delay.ms]="i * 40"
+        >[ {{ skill.name }} ]</span>
       </div>
-
       <ng-template #noSkills>
-        <div class="glass-card max-w-md mx-auto p-8 text-center">
-          <p class="text-slate-500">Skills coming soon — add them via the admin dashboard.</p>
-        </div>
+        <div class="hud-panel p-8 text-center max-w-md mx-auto text-slate-500">No modules loaded yet.</div>
       </ng-template>
     </div>
   `,

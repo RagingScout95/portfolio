@@ -8,20 +8,13 @@ import { Project } from '../../models/portfolio.models';
   standalone: true,
   imports: [CommonModule, ProjectCardComponent],
   template: `
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28">
-      <div class="text-center mb-12">
-        <p class="section-label">Portfolio</p>
-        <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-100">Featured Projects</h2>
-        <p class="text-slate-400 mt-4 max-w-xl mx-auto">A selection of things I've built — from games to full-stack apps.</p>
+    <div class="max-w-6xl mx-auto px-4 md:px-8 py-12 min-h-full flex flex-col justify-center">
+      <div class="text-center mb-8">
+        <p class="hud-title">⟨ Mission Briefings ⟩</p>
+        <h2 class="hud-heading mt-2">Projects</h2>
       </div>
-
-      <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        <app-project-card
-          *ngFor="let project of projects; let i = index"
-          [project]="project"
-          [style.animation-delay.ms]="i * 80"
-          class="stagger-item block"
-        ></app-project-card>
+      <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <app-project-card *ngFor="let project of projects; let i = index" [project]="project" class="stagger-item block" [style.animation-delay.ms]="i * 70"></app-project-card>
       </div>
     </div>
   `,

@@ -1,55 +1,57 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ButtonComponent } from '../ui/button/button.component';
+import gsap from 'gsap';
 import { SocialIconComponent } from '../ui/social-icon/social-icon.component';
 import { SocialLink } from '../../models/portfolio.models';
+import { prefersReducedMotion } from '../../core/motion/motion.util';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, SocialIconComponent],
+  imports: [CommonModule, SocialIconComponent],
   template: `
-    <section class="hero-mesh relative min-h-screen flex items-center overflow-hidden pt-20">
-      <div class="absolute inset-0 pointer-events-none">
-        <div class="absolute top-1/4 -left-32 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl animate-pulse-glow"></div>
-        <div class="absolute bottom-1/4 -right-32 w-96 h-96 bg-violet-600/15 rounded-full blur-3xl animate-pulse-glow" style="animation-delay: 2s"></div>
-      </div>
-
-      <div class="relative z-10 max-w-6xl mx-auto px-4 md:px-8 w-full py-16 md:py-24">
-        <div class="flex flex-col md:flex-row items-center gap-12 lg:gap-16">
-          <div class="flex-1 text-center md:text-left space-y-6 animate-fade-in-up">
-            <p class="section-label md:text-left text-center">Portfolio</p>
-            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-100 leading-tight">
-              Hi, I'm
-              <span class="block mt-1 bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">
-                {{ name }}
-              </span>
+    <section class="section-snap flex items-center relative pt-14">
+      <div class="max-w-7xl mx-auto px-4 md:px-8 w-full py-12 md:py-20">
+        <div class="grid lg:grid-cols-2 gap-10 items-center">
+          <div #content class="space-y-6 order-2 lg:order-1">
+            <p class="hud-title">⟨ Operator Online ⟩</p>
+            <h1 class="hud-heading leading-tight">
+              <span class="block text-slate-400 text-lg md:text-xl font-normal normal-case tracking-normal mb-2">Callsign</span>
+              <span class="neon-text">{{ name }}</span>
             </h1>
-            <p class="text-xl md:text-2xl text-indigo-300 font-medium">{{ role }}</p>
-            <p class="text-base md:text-lg text-slate-400 max-w-xl leading-relaxed">{{ tagline }}</p>
+            <p class="text-xl md:text-2xl font-[Rajdhani] font-semibold uppercase tracking-wide text-amber-400/90">
+              {{ role }}
+            </p>
+            <p class="text-slate-400 text-base md:text-lg leading-relaxed max-w-xl">{{ tagline }}</p>
 
-            <div class="flex flex-col sm:flex-row gap-3 justify-center md:justify-start pt-2">
-              <app-button label="View Projects" type="primary" (btnClick)="scrollToSection('projects')"></app-button>
-              <app-button label="Get in Touch" type="secondary" (btnClick)="scrollToSection('contact')"></app-button>
+            <div class="flex flex-wrap gap-3 pt-2">
+              <button type="button" class="hud-btn hud-btn-primary" (click)="scrollTo('projects')">
+                [ Deploy Projects ]
+              </button>
+              <button type="button" class="hud-btn" (click)="scrollTo('contact')">
+                [ Open Comms ]
+              </button>
             </div>
 
-            <div class="flex gap-3 justify-center md:justify-start pt-4" *ngIf="socialLinks.length">
+            <div class="flex flex-wrap gap-2 pt-4" *ngIf="socialLinks.length">
               <app-social-icon *ngFor="let link of socialLinks" [link]="link"></app-social-icon>
             </div>
           </div>
 
-          <div class="flex-shrink-0 animate-fade-in" style="animation-delay: 0.2s">
-            <div class="relative">
-              <div class="absolute -inset-4 bg-gradient-to-r from-indigo-600/30 to-violet-600/30 rounded-full blur-2xl animate-float"></div>
+          <div #photoWrap class="order-1 lg:order-2 flex justify-center lg:justify-end">
+            <div class="hud-panel p-3 max-w-sm w-full">
+              <p class="hud-title mb-3 text-center">⟨ Visual ID ⟩</p>
               <img
                 [src]="photoUrl"
-                [alt]="name + ' - ' + role"
+                [alt]="name"
                 loading="eager"
                 fetchpriority="high"
-                width="320"
-                height="320"
-                class="relative w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-2xl object-cover border border-white/20 shadow-2xl shadow-indigo-500/20"
+                class="w-full aspect-square object-cover rounded border border-teal-500/20"
               />
+              <div class="flex justify-between mt-3 text-[10px] font-mono text-slate-600 uppercase">
+                <span>Status: Active</span>
+                <span class="text-teal-500/80">● Live</span>
+              </div>
             </div>
           </div>
         </div>
@@ -57,14 +59,32 @@ import { SocialLink } from '../../models/portfolio.models';
     </section>
   `,
 })
-export class HeroComponent {
+export class HeroComponent implements AfterViewInit {
   @Input() name!: string;
   @Input() role!: string;
   @Input() tagline!: string;
   @Input() photoUrl!: string;
   @Input() socialLinks: SocialLink[] = [];
 
-  scrollToSection(sectionId: string): void {
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  @ViewChild('content') contentRef!: ElementRef<HTMLElement>;
+  @ViewChild('photoWrap') photoRef!: ElementRef<HTMLElement>;
+
+  ngAfterViewInit(): void {
+    if (prefersReducedMotion()) return;
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.from(this.contentRef.nativeElement.children, {
+      opacity: 0,
+      y: 28,
+      stagger: 0.08,
+      duration: 0.7,
+    }).from(this.photoRef.nativeElement, {
+      opacity: 0,
+      scale: 0.92,
+      duration: 0.65,
+    }, '-=0.4');
+  }
+
+  scrollTo(id: string): void {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
