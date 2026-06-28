@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import gsap from 'gsap';
 import { SocialIconComponent } from '../ui/social-icon/social-icon.component';
 import { SocialLink } from '../../models/portfolio.models';
+import { ScrollContainerService } from '../../core/motion/scroll-container.service';
 import { prefersReducedMotion } from '../../core/motion/motion.util';
 
 @Component({
@@ -69,6 +70,8 @@ export class HeroComponent implements AfterViewInit {
   @ViewChild('content') contentRef!: ElementRef<HTMLElement>;
   @ViewChild('photoWrap') photoRef!: ElementRef<HTMLElement>;
 
+  constructor(private scrollContainer: ScrollContainerService) {}
+
   ngAfterViewInit(): void {
     if (prefersReducedMotion()) return;
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
@@ -85,6 +88,6 @@ export class HeroComponent implements AfterViewInit {
   }
 
   scrollTo(id: string): void {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    this.scrollContainer.scrollToId(id);
   }
 }

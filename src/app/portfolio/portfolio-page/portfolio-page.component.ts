@@ -14,7 +14,7 @@ import { AmbientBackgroundComponent } from '../core/ambient/ambient-background.c
 import { TacticalMapComponent } from '../core/tactical-map/tactical-map.component';
 import { PortfolioDataService } from '../services/portfolio-data.service';
 import { NavSection } from '../components/navbar/navbar.component';
-import { Profile, Project, Experience } from '../models/portfolio.models';
+import { ScrollContainerService } from '../core/motion/scroll-container.service';
 
 @Component({
   selector: 'app-portfolio-page',
@@ -123,7 +123,10 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit {
     { id: 'contact', label: 'Comms' },
   ];
 
-  constructor(private portfolioDataService: PortfolioDataService) {}
+  constructor(
+    private portfolioDataService: PortfolioDataService,
+    private scrollContainer: ScrollContainerService
+  ) {}
 
   ngOnInit(): void {
     forkJoin({
@@ -144,15 +147,15 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => this.mainScrollRef?.nativeElement?.addEventListener('scroll', () => this.updateActiveSection()));
+    const main = this.mainScrollRef?.nativeElement;
+    if (main) {
+      this.scrollContainer.register(main);
+      main.addEventListener('scroll', () => this.updateActiveSection());
+    }
   }
 
   goToSection(id: string): void {
-    const main = this.mainScrollRef?.nativeElement;
-    const el = document.getElementById(id);
-    if (main && el) {
-      main.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
-    }
+    this.scrollContainer.scrollToId(id);
     this.activeSection = id;
   }
 

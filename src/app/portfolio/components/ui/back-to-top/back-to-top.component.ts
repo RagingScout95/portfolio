@@ -1,5 +1,6 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ScrollContainerService } from '../../core/motion/scroll-container.service';
 
 @Component({
   selector: 'app-back-to-top',
@@ -11,15 +12,21 @@ import { CommonModule } from '@angular/common';
     </button>
   `,
 })
-export class BackToTopComponent {
+export class BackToTopComponent implements OnDestroy {
   isVisible = false;
+  private intervalId?: ReturnType<typeof setInterval>;
 
-  @HostListener('window:scroll')
-  onWindowScroll(): void {
-    this.isVisible = window.scrollY > 400;
+  constructor(private scrollContainer: ScrollContainerService) {
+    this.intervalId = setInterval(() => {
+      this.isVisible = this.scrollContainer.scrollTop > 400;
+    }, 200);
+  }
+
+  ngOnDestroy(): void {
+    if (this.intervalId) clearInterval(this.intervalId);
   }
 
   scrollToTop(): void {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.scrollContainer.scrollToTop();
   }
 }
