@@ -1,6 +1,6 @@
 import { Component, HostListener, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ScrollContainerService } from '../../core/motion/scroll-container.service';
+import { ScrollContainerService } from '../../../core/motion/scroll-container.service';
 
 @Component({
   selector: 'app-back-to-top',

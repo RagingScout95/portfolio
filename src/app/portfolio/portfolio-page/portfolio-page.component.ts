@@ -15,6 +15,7 @@ import { TacticalMapComponent } from '../core/tactical-map/tactical-map.componen
 import { PortfolioDataService } from '../services/portfolio-data.service';
 import { NavSection } from '../components/navbar/navbar.component';
 import { ScrollContainerService } from '../core/motion/scroll-container.service';
+import { Profile, Project, Experience } from '../models/portfolio.models';
 
 @Component({
   selector: 'app-portfolio-page',
