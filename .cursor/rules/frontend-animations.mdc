@@ -1,0 +1,45 @@
+---
+description: Animation and motion standards for portfolio frontend
+globs: portfolio-frontend/**/*
+alwaysApply: false
+---
+
+# Frontend Animation Rules
+
+## Design direction
+
+Premium dark portfolio with smooth, purposeful motion — not flashy overload.
+
+## Required patterns
+
+- Scroll reveal: use `RevealOnScrollDirective` (`appRevealOnScroll`) on sections
+- Stagger: CSS `animation-delay` on list children (max 80ms increments)
+- Hover: `transition-all duration-300` + subtle `translate-y` or scale (max 1.02)
+- Hero: animated gradient mesh background (CSS only, no canvas game in hero)
+
+## Performance
+
+- Prefer CSS transforms/opacity over layout properties (width, top, left)
+- Cap simultaneous animations; unobserve after reveal (Intersection Observer)
+- No infinite animations except subtle background gradients
+
+## Accessibility
+
+Always include:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
+
+Respect reduced motion in directives — skip observer animation, show content immediately.
+
+## Avoid
+
+- Canvas games or cursor hijacking on main hero (optional easter eggs elsewhere only)
+- Glitch effects on primary headings (hurts readability)
+- Parallax that causes jank on mobile

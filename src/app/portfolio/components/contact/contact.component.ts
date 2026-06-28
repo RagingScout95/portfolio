@@ -10,135 +10,85 @@ import { SocialLink } from '../../models/portfolio.models';
   standalone: true,
   imports: [CommonModule, FormsModule, ButtonComponent, SocialIconComponent],
   template: `
-    <div class="max-w-6xl mx-auto px-4 md:px-8 py-16">
-      <h2 class="text-4xl md:text-5xl font-bold text-gray-100 mb-6 text-center">
-        Contact Me
-      </h2>
-      
-      <p class="text-lg text-gray-400 text-center mb-12 max-w-2xl mx-auto">
-        Feel free to reach out! Whether you have a question, want to collaborate, or just want to say hello, I'd love to hear from you.
-      </p>
-      
-      <div class="max-w-2xl mx-auto">
-        <!-- Contact Form -->
-        <form
-          (ngSubmit)="onSubmit()"
-          class="bg-black border border-red-900/50 rounded-xl shadow-lg p-8 space-y-6"
-        >
-          <!-- Name Input -->
+    <div class="max-w-6xl mx-auto px-4 md:px-8 py-20 md:py-28">
+      <div class="text-center mb-12">
+        <p class="section-label">Contact</p>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-100">Get In Touch</h2>
+        <p class="text-slate-400 mt-4 max-w-xl mx-auto">
+          Have a question or want to collaborate? I'd love to hear from you.
+        </p>
+      </div>
+
+      <div class="max-w-xl mx-auto">
+        <form (ngSubmit)="onSubmit()" class="glass-card p-8 space-y-5">
           <div>
-            <label for="name" class="block text-gray-300 font-semibold mb-2">
-              Name
-            </label>
+            <label for="name" class="block text-sm font-medium text-slate-300 mb-2">Name</label>
             <input
               type="text"
               id="name"
               name="name"
               [(ngModel)]="formData.name"
               required
-              class="w-full px-4 py-3 bg-black border border-red-900/50 rounded-lg text-gray-100 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/50 transition"
+              class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 transition"
               placeholder="Your name"
             />
           </div>
-          
-          <!-- Email Input -->
           <div>
-            <label for="email" class="block text-gray-300 font-semibold mb-2">
-              Email
-            </label>
+            <label for="email" class="block text-sm font-medium text-slate-300 mb-2">Email</label>
             <input
               type="email"
               id="email"
               name="email"
               [(ngModel)]="formData.email"
               required
-              class="w-full px-4 py-3 bg-black border border-red-900/50 rounded-lg text-gray-100 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/50 transition"
-              placeholder="your.email@example.com"
+              class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 transition"
+              placeholder="you@example.com"
             />
           </div>
-          
-          <!-- Message Textarea -->
           <div>
-            <label for="message" class="block text-gray-300 font-semibold mb-2">
-              Message
-            </label>
+            <label for="message" class="block text-sm font-medium text-slate-300 mb-2">Message</label>
             <textarea
               id="message"
               name="message"
               [(ngModel)]="formData.message"
               required
-              rows="6"
-              class="w-full px-4 py-3 bg-black border border-red-900/50 rounded-lg text-gray-100 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/50 transition resize-none"
+              rows="5"
+              class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 transition resize-none"
               placeholder="Your message..."
             ></textarea>
           </div>
-          
-          <!-- Success Message -->
-          <div
-            *ngIf="showSuccessMessage"
-            class="p-4 bg-green-900/30 border border-green-700 rounded-lg text-green-400"
-          >
-            Thank you for your message! I'll get back to you soon.
+
+          <div *ngIf="showSuccessMessage" class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm">
+            Thank you! I'll get back to you soon.
           </div>
-          
-          <!-- Submit Button -->
-          <div class="flex justify-center">
-            <app-button
-              label="Send Message"
-              type="primary"
-            ></app-button>
-          </div>
+
+          <app-button label="Send Message" type="primary"></app-button>
         </form>
-        
-        <!-- Social Links -->
-        <div class="mt-12">
-          <p class="text-gray-400 text-center mb-6">
-            Or connect with me on:
-          </p>
-          <div class="flex gap-4 justify-center">
-            <app-social-icon
-              *ngFor="let link of socialLinks"
-              [link]="link"
-            ></app-social-icon>
+
+        <div class="mt-12 text-center" *ngIf="socialLinks.length">
+          <p class="text-slate-500 text-sm mb-4">Or connect with me</p>
+          <div class="flex gap-3 justify-center flex-wrap">
+            <app-social-icon *ngFor="let link of socialLinks" [link]="link"></app-social-icon>
           </div>
         </div>
       </div>
+
+      <footer class="mt-20 pt-8 border-t border-white/10 text-center text-slate-500 text-sm">
+        <p>Built with Angular & Tailwind · © {{ year }} ragingscout97</p>
+      </footer>
     </div>
   `,
-  styles: []
 })
 export class ContactComponent {
   @Input() socialLinks: SocialLink[] = [];
-  
-  formData = {
-    name: '',
-    email: '',
-    message: ''
-  };
-  
+  year = new Date().getFullYear();
+
+  formData = { name: '', email: '', message: '' };
   showSuccessMessage = false;
 
   onSubmit(): void {
-    console.log('Form submitted:', this.formData);
-    
-    // Show success message
     this.showSuccessMessage = true;
-    
-    // Reset form
-    this.formData = {
-      name: '',
-      email: '',
-      message: ''
-    };
-    
-    // Hide success message after 5 seconds
-    setTimeout(() => {
-      this.showSuccessMessage = false;
-    }, 5000);
+    this.formData = { name: '', email: '', message: '' };
+    setTimeout(() => (this.showSuccessMessage = false), 5000);
   }
 }
-
-
-
-
-

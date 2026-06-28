@@ -5,7 +5,8 @@ import { Directive, ElementRef, OnInit, OnDestroy, Renderer2 } from '@angular/co
   standalone: true
 })
 export class RevealOnScrollDirective implements OnInit, OnDestroy {
-  private observer!: IntersectionObserver;
+  private observer?: IntersectionObserver;
+  private reducedMotion = false;
 
   constructor(
     private el: ElementRef,
@@ -13,47 +14,38 @@ export class RevealOnScrollDirective implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Set initial hidden state
-    this.renderer.addClass(this.el.nativeElement, 'opacity-0');
-    this.renderer.addClass(this.el.nativeElement, 'translate-y-6');
+    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Create intersection observer
+    if (this.reducedMotion) {
+      this.renderer.addClass(this.el.nativeElement, 'opacity-100');
+      return;
+    }
+
+    this.renderer.addClass(this.el.nativeElement, 'opacity-0');
+    this.renderer.addClass(this.el.nativeElement, 'translate-y-8');
+
     this.observer = new IntersectionObserver(
-      (entries) => {
+      entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            // Element is in view - reveal it
             this.renderer.removeClass(this.el.nativeElement, 'opacity-0');
-            this.renderer.removeClass(this.el.nativeElement, 'translate-y-6');
+            this.renderer.removeClass(this.el.nativeElement, 'translate-y-8');
             this.renderer.addClass(this.el.nativeElement, 'opacity-100');
             this.renderer.addClass(this.el.nativeElement, 'translate-y-0');
-            this.renderer.addClass(this.el.nativeElement, 'transition');
+            this.renderer.addClass(this.el.nativeElement, 'transition-all');
             this.renderer.addClass(this.el.nativeElement, 'duration-700');
             this.renderer.addClass(this.el.nativeElement, 'ease-out');
-            
-            // Optionally unobserve after revealing (one-time animation)
-            this.observer.unobserve(this.el.nativeElement);
+            this.observer?.unobserve(this.el.nativeElement);
           }
         });
       },
-      {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      }
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
     );
 
-    // Start observing
     this.observer.observe(this.el.nativeElement);
   }
 
   ngOnDestroy(): void {
-    if (this.observer) {
-      this.observer.disconnect();
-    }
+    this.observer?.disconnect();
   }
 }
-
-
-
-
-

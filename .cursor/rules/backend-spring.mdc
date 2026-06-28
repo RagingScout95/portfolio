@@ -1,0 +1,32 @@
+---
+description: Spring Boot backend conventions for portfolio-backend
+globs: portfolio-backend/**/*
+alwaysApply: false
+---
+
+# Backend Spring Rules
+
+## Stack
+
+- Spring Boot, JPA/Hibernate, PostgreSQL
+- JWT auth for `/api/admin/*`
+- Public read-only: `/api/public/portfolio`, `/api/public/health`
+- Config via `.env` + `application-{dev,prod}.properties` with `${ENV_VAR}` placeholders
+
+## Patterns
+
+- Entities in `entity/`; controllers split: `PublicController`, `PortfolioController` (admin), `AuthController`
+- CORS origins must include Vercel domains + localhost:4200/4201
+- File uploads: `FileStorageService` → served at `/api/files/**`
+
+## When changing API
+
+1. Update Java entity/DTO
+2. Sync `portfolio-frontend/src/app/portfolio/models/portfolio.models.ts`
+3. Update `PortfolioDataService` mapping if field names differ
+4. Test locally with dev profile before `deploy.bat`
+
+## Deploy
+
+- Production: port 8082, DB `portfolio_backend`, user `portfolio_user` on Oracle Cloud VM
+- Only deploy backend when Java code changes

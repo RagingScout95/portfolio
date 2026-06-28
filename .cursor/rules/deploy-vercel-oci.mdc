@@ -1,0 +1,29 @@
+---
+description: Vercel and Oracle Cloud deploy conventions
+globs: "**/deploy*.bat,**/vercel.json,portfolio-deploy-kit/**"
+alwaysApply: false
+---
+
+# Deploy Rules
+
+## Frontend (Vercel)
+
+- Config: `vercel.json` at repo root
+- Build: `npm run build -- --configuration production`
+- Output: `dist/portfolio/browser` (frontend) or `dist/portfolio-admin/browser` (admin)
+- API URL baked in `environment.prod.ts` — no Vercel env vars needed
+
+## Backend (Oracle Cloud)
+
+- Script: `portfolio-backend/deploy.bat`
+- SSH alias: `ubuntu-server` → `144.24.119.210`
+- Remote: `/opt/portfolio-backend/current.jar`, systemd `portfolio-backend`
+- nginx proxies `portfolio-api.ragingscout97.in` → `127.0.0.1:8082`
+
+## Checklist before deploy
+
+1. `ng build --configuration production` passes
+2. No secrets in git diff
+3. Backend deploy only if `pom.xml` or `src/` Java changed
+
+See `portfolio-deploy-kit/SERVER-ARCHITECTURE.md` for full topology.

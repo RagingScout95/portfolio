@@ -1,141 +1,82 @@
 /**
- * Red-Black Theme Configuration
- * Centralized color theme data for the portfolio
+ * Premium dark theme — glassmorphism, indigo/violet accents, smooth motion
+ * Design direction: modern developer portfolio (default until user picks references)
  */
 
 export const Theme = {
-  // Background Colors
   background: {
-    primary: 'bg-black',
-    secondary: 'bg-black',
-    card: 'bg-black',
-    input: 'bg-black',
-    hover: 'bg-black',
+    primary: 'bg-slate-950',
+    secondary: 'bg-slate-900/50',
+    mesh: 'hero-mesh',
+    card: 'glass-card',
   },
 
-  // Text Colors
   text: {
-    primary: 'text-gray-100',
-    secondary: 'text-gray-200',
-    tertiary: 'text-gray-300',
-    muted: 'text-gray-400',
-    mutedDark: 'text-gray-500',
-    accent: 'text-red-500',
-    accentHover: 'text-red-400',
-    white: 'text-white',
+    primary: 'text-slate-100',
+    secondary: 'text-slate-300',
+    muted: 'text-slate-400',
+    accent: 'text-indigo-400',
+    gradient: 'bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent',
   },
 
-  // Border Colors
   border: {
-    default: 'border-red-900/50',
-    hover: 'border-red-600',
-    focus: 'border-red-600',
-    accent: 'border-red-500',
+    default: 'border-white/10',
+    hover: 'border-indigo-500/40',
+    focus: 'border-indigo-500',
   },
 
-  // Red Color Palette
-  red: {
-    400: 'text-red-400',
-    500: 'text-red-500',
-    600: 'bg-red-600',
-    700: 'hover:bg-red-700',
-    600Border: 'border-red-600',
-    900Border: 'border-red-900/50',
-    600Shadow: 'shadow-red-600/50',
-    600Shadow20: 'shadow-red-600/20',
-    600Ring: 'ring-red-600/50',
-    950Gradient: 'from-red-950/30',
+  accent: {
+    indigo: 'text-indigo-400',
+    violet: 'text-violet-400',
+    glow: 'shadow-indigo-500/20',
+    ring: 'ring-indigo-500/30',
   },
 
-  // Gradient Classes
   gradient: {
-    hero: 'bg-gradient-to-b from-black via-black to-black',
-    card: 'bg-gradient-to-br from-red-950/30 to-black',
+    hero: 'hero-mesh',
+    button: 'bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500',
+    card: 'bg-gradient-to-br from-indigo-950/40 via-slate-900/60 to-slate-950/80',
   },
 
-  // Button Styles
   button: {
-    primary: 'bg-red-600 text-white hover:bg-red-700 hover:scale-105 shadow-lg hover:shadow-red-600/50',
-    secondary: 'border-2 border-gray-600 text-gray-100 hover:border-red-600 hover:text-red-500 hover:scale-105',
+    primary: 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-500 hover:to-violet-500 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5',
+    secondary: 'border border-white/20 text-slate-200 hover:border-indigo-500/50 hover:text-indigo-300 hover:-translate-y-0.5',
   },
 
-  // Component Specific Classes
   components: {
     navbar: {
-      background: 'bg-black/90',
-      border: 'border-red-900/50',
-      link: 'text-gray-300 hover:text-red-500',
-      linkActive: 'text-red-500',
-      linkActiveUnderline: 'after:bg-red-600',
-      mobileMenu: 'bg-black',
+      background: 'bg-slate-950/80 backdrop-blur-xl',
+      border: 'border-white/10',
+      link: 'text-slate-400 hover:text-indigo-300',
+      linkActive: 'text-indigo-400',
+    },
+    section: {
+      padding: 'py-20 md:py-28',
+      heading: 'text-3xl md:text-4xl font-bold tracking-tight text-slate-100',
+      subheading: 'text-slate-400 text-lg max-w-2xl mx-auto text-center',
     },
     skillTag: {
-      background: 'bg-black',
-      border: 'border-red-900/50',
-      text: 'text-gray-200',
-      hover: 'hover:border-red-600',
+      base: 'px-4 py-2 rounded-full border border-white/10 bg-white/5 text-slate-200 hover:border-indigo-500/40 hover:bg-indigo-500/10 transition-all duration-300',
     },
     projectCard: {
-      background: 'bg-black',
-      border: 'border-red-900/50',
-      hover: 'hover:border-red-600 hover:shadow-red-600/20',
-      techTag: {
-        background: 'bg-black',
-        border: 'border-red-900/50',
-        text: 'text-gray-300',
-      },
-    },
-    contactForm: {
-      background: 'bg-black',
-      border: 'border-red-900/50',
-      input: {
-        background: 'bg-black',
-        border: 'border-red-900/50',
-        focus: 'focus:border-red-600 focus:ring-2 focus:ring-red-600/50',
-        text: 'text-gray-100',
-      },
+      base: 'glass-card rounded-2xl p-6 h-full flex flex-col hover:border-indigo-500/30 hover:-translate-y-1 transition-all duration-300',
+      techTag: 'px-2.5 py-1 rounded-md text-xs bg-indigo-500/10 text-indigo-300 border border-indigo-500/20',
     },
     experience: {
-      timeline: {
-        line: 'bg-red-900/50',
-        dot: 'bg-red-600',
-        dotRing: 'ring-black',
-      },
-      card: {
-        background: 'bg-black',
-        border: 'border-red-900/50',
-        hover: 'hover:border-red-600',
-        role: 'text-red-500',
-        bullet: 'text-red-500',
-      },
+      dot: 'bg-indigo-500 ring-4 ring-indigo-500/20',
+      line: 'bg-gradient-to-b from-indigo-500/50 to-transparent',
     },
     socialIcon: {
-      background: 'bg-black',
-      border: 'border-red-900/50',
-      hover: 'hover:border-red-600',
-      text: 'text-gray-100',
+      base: 'flex items-center justify-center w-11 h-11 rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:border-indigo-500/40 hover:text-indigo-300 hover:-translate-y-0.5 transition-all duration-300',
     },
     backToTop: {
-      background: 'bg-red-600',
-      hover: 'hover:bg-red-700',
+      base: 'bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-500/30',
     },
   },
 
-  // Utility Classes
-  utilities: {
-    transition: 'transition-all duration-300',
-    transitionColors: 'transition-colors duration-300',
-    rounded: {
-      lg: 'rounded-lg',
-      xl: 'rounded-xl',
-      full: 'rounded-full',
-    },
-    shadow: {
-      lg: 'shadow-lg',
-      xl: 'shadow-2xl',
-      red: 'shadow-red-600/50',
-      red20: 'shadow-red-600/20',
-    },
+  motion: {
+    transition: 'transition-all duration-300 ease-out',
+    reveal: 'transition-all duration-700 ease-out',
+    stagger: 60,
   },
 } as const;
-

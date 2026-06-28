@@ -11,30 +11,26 @@ export interface NavSection {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <nav class="fixed top-0 inset-x-0 z-50 backdrop-blur bg-black/90 border-b border-red-900/50">
+    <nav class="fixed top-0 inset-x-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-white/10">
       <div class="max-w-6xl mx-auto px-4 md:px-8">
         <div class="flex items-center justify-between h-16">
-          <!-- Logo / Brand -->
-          <div class="flex-shrink-0">
-            <a
-              href="#hero"
-              (click)="scrollToSection($event, 'hero')"
-              class="flex items-center gap-2 text-2xl font-bold tracking-tight transition group"
-            >
-              <img
-                *ngIf="faviconUrl"
-                [src]="faviconUrl"
-                [alt]="brandText"
-                class="w-8 h-8 rounded object-contain"
-              />
-              <span class="bg-gradient-to-r from-red-500 to-red-400 bg-clip-text text-transparent group-hover:from-red-400 group-hover:to-red-300 transition-all">
-                {{ brandText }}
-              </span>
-            </a>
-          </div>
-          
-          <!-- Desktop Navigation -->
-          <div class="hidden md:flex items-center space-x-8">
+          <a
+            href="#hero"
+            (click)="scrollToSection($event, 'hero')"
+            class="flex items-center gap-2 text-lg font-bold tracking-tight group"
+          >
+            <img
+              *ngIf="faviconUrl"
+              [src]="faviconUrl"
+              [alt]="brandText"
+              class="w-7 h-7 rounded object-contain"
+            />
+            <span class="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent group-hover:from-indigo-300 group-hover:to-violet-300 transition-all">
+              {{ brandText }}
+            </span>
+          </a>
+
+          <div class="hidden md:flex items-center gap-1">
             <a
               *ngFor="let section of sections"
               [href]="'#' + section.id"
@@ -44,49 +40,22 @@ export interface NavSection {
               {{ section.label }}
             </a>
           </div>
-          
-          <!-- Mobile Menu Button -->
+
           <button
             (click)="toggleMobileMenu()"
-            class="md:hidden p-2 rounded-lg text-gray-300 hover:text-red-500 hover:bg-black transition"
+            class="md:hidden p-2 rounded-lg text-slate-400 hover:text-indigo-300 hover:bg-white/5 transition"
             aria-label="Toggle menu"
           >
-            <svg
-              *ngIf="!mobileMenuOpen"
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
+            <svg *ngIf="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
             </svg>
-            <svg
-              *ngIf="mobileMenuOpen"
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
+            <svg *ngIf="mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
           </button>
         </div>
-        
-        <!-- Mobile Navigation -->
-        <div
-          *ngIf="mobileMenuOpen"
-          class="md:hidden py-4 space-y-2 border-t border-red-900/50"
-        >
+
+        <div *ngIf="mobileMenuOpen" class="md:hidden py-3 space-y-1 border-t border-white/10">
           <a
             *ngFor="let section of sections"
             [href]="'#' + section.id"
@@ -99,28 +68,23 @@ export interface NavSection {
       </div>
     </nav>
   `,
-  styles: []
 })
 export class NavbarComponent {
   @Input() sections: NavSection[] = [];
-  @Input() brandText: string = 'Portfolio';
+  @Input() brandText = 'Portfolio';
   @Input() faviconUrl?: string;
-  
+
   activeSection = 'hero';
   mobileMenuOpen = false;
 
   @HostListener('window:scroll')
   onWindowScroll(): void {
-    // Determine active section based on scroll position
-    const scrollPosition = window.scrollY + 100;
-    
+    const scrollPosition = window.scrollY + 120;
     for (const section of this.sections) {
       const element = document.getElementById(section.id);
       if (element) {
-        const offsetTop = element.offsetTop;
-        const offsetBottom = offsetTop + element.offsetHeight;
-        
-        if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
+        const { offsetTop, offsetHeight } = element;
+        if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
           this.activeSection = section.id;
           break;
         }
@@ -134,21 +98,17 @@ export class NavbarComponent {
   }
 
   getLinkClasses(sectionId: string): string {
-    const baseClasses = 'text-gray-300 hover:text-red-500 transition-colors duration-300 font-medium relative pb-1';
-    const activeClasses = 'text-red-500 after:content-[""] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-red-600';
-    
+    const base = 'px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-300';
     return this.activeSection === sectionId
-      ? `${baseClasses} ${activeClasses}`
-      : baseClasses;
+      ? `${base} text-indigo-400 bg-indigo-500/10`
+      : `${base} text-slate-400 hover:text-indigo-300 hover:bg-white/5`;
   }
 
   getMobileLinkClasses(sectionId: string): string {
-    const baseClasses = 'block px-4 py-3 rounded-lg text-gray-300 hover:text-red-500 hover:bg-black transition-colors duration-300 font-medium';
-    const activeClasses = 'text-red-500 bg-black';
-    
+    const base = 'block px-4 py-3 rounded-lg text-sm font-medium transition-colors';
     return this.activeSection === sectionId
-      ? `${baseClasses} ${activeClasses}`
-      : baseClasses;
+      ? `${base} text-indigo-400 bg-indigo-500/10`
+      : `${base} text-slate-400 hover:text-indigo-300 hover:bg-white/5`;
   }
 
   toggleMobileMenu(): void {
@@ -159,8 +119,3 @@ export class NavbarComponent {
     this.mobileMenuOpen = false;
   }
 }
-
-
-
-
-

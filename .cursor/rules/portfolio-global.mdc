@@ -1,0 +1,29 @@
+---
+description: Portfolio monorepo context, secrets policy, and live URLs
+alwaysApply: true
+---
+
+# Portfolio Global Rules
+
+## Monorepo
+
+- `portfolio-frontend/` — public site (edit for UI)
+- `portfolio-admin/` — CMS dashboard
+- `portfolio-backend/` — Spring Boot API
+- `portfolio-deploy-kit/` — private deploy backup (never push secrets)
+
+## Secrets
+
+Never commit: `.env`, `recovered/`, `application-dev.properties`, `application-prod.properties` with real values.
+
+## Production URLs
+
+- Site: https://ragingscout97.in
+- Admin: https://admin.ragingscout97.in
+- API: https://portfolio-api.ragingscout97.in/api
+
+## Workflow
+
+- One section per session; verify with `ng build` in `portfolio-frontend`
+- Content comes from API — do not hardcode profile/projects data in templates
+- See root `AGENTS.md` for full context

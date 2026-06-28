@@ -5,12 +5,13 @@ import { NavbarComponent, NavSection } from '../components/navbar/navbar.compone
 import { HeroComponent } from '../components/hero/hero.component';
 import { AboutComponent } from '../components/about/about.component';
 import { SkillsComponent } from '../components/skills/skills.component';
+import { ExperienceComponent } from '../components/experience/experience.component';
 import { ProjectsComponent } from '../components/projects/projects.component';
 import { ContactComponent } from '../components/contact/contact.component';
 import { BackToTopComponent } from '../components/ui/back-to-top/back-to-top.component';
 import { RevealOnScrollDirective } from '../directives/reveal-on-scroll.directive';
 import { PortfolioDataService } from '../services/portfolio-data.service';
-import { Profile, Project } from '../models/portfolio.models';
+import { Profile, Project, Experience } from '../models/portfolio.models';
 
 @Component({
   selector: 'app-portfolio-page',
@@ -21,31 +22,29 @@ import { Profile, Project } from '../models/portfolio.models';
     HeroComponent,
     AboutComponent,
     SkillsComponent,
+    ExperienceComponent,
     ProjectsComponent,
     ContactComponent,
     BackToTopComponent,
     RevealOnScrollDirective
   ],
   template: `
-    <div class="bg-black text-gray-100 min-h-screen">
-      <!-- Loading Indicator -->
-      <div *ngIf="isLoading" class="flex items-center justify-center min-h-screen">
+    <div class="bg-slate-950 text-slate-100 min-h-screen">
+      <div *ngIf="isLoading" class="flex items-center justify-center min-h-screen hero-mesh">
         <div class="text-center">
-          <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mb-4"></div>
-          <p class="text-gray-400">Loading portfolio data...</p>
+          <div class="inline-block w-10 h-10 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p class="text-slate-400 text-sm">Loading portfolio...</p>
         </div>
       </div>
 
-      <!-- Main Content -->
       <div *ngIf="!isLoading">
-        <!-- Navbar -->
         <app-navbar
           [sections]="sections"
+          [brandText]="'ragingscout97'"
           [faviconUrl]="profile.faviconUrl"
         ></app-navbar>
-        
+
         <main>
-          <!-- Hero Section -->
           <section id="hero">
             <app-hero
               [name]="profile.name"
@@ -55,49 +54,48 @@ import { Profile, Project } from '../models/portfolio.models';
               [socialLinks]="profile.socialLinks"
             ></app-hero>
           </section>
-          
-          <!-- About Section -->
+
           <section id="about" appRevealOnScroll>
             <app-about [profile]="profile" mode="about-only"></app-about>
           </section>
 
-          <!-- Timeline Section (Education & Career) -->
           <section id="timeline" appRevealOnScroll>
             <app-about [profile]="profile" mode="timeline-only"></app-about>
           </section>
-          
-          <!-- Skills Section -->
+
+          <section id="experience" appRevealOnScroll>
+            <app-experience [experiences]="experiences"></app-experience>
+          </section>
+
           <section id="skills" appRevealOnScroll>
             <app-skills [skills]="profile.skills"></app-skills>
           </section>
-          
-          <!-- Projects Section -->
+
           <section id="projects" appRevealOnScroll>
             <app-projects [projects]="projects"></app-projects>
           </section>
-          
-          <!-- Contact Section -->
+
           <section id="contact" appRevealOnScroll>
             <app-contact [socialLinks]="profile.socialLinks"></app-contact>
           </section>
         </main>
-        
-        <!-- Back to Top Button -->
+
         <app-back-to-top></app-back-to-top>
       </div>
     </div>
   `,
-  styles: []
 })
 export class PortfolioPageComponent implements OnInit {
   profile!: Profile;
   projects: Project[] = [];
+  experiences: Experience[] = [];
   isLoading = true;
 
   sections: NavSection[] = [
     { id: 'hero', label: 'Home' },
     { id: 'about', label: 'About' },
-    { id: 'timeline', label: 'Timeline' },
+    { id: 'timeline', label: 'Journey' },
+    { id: 'experience', label: 'Experience' },
     { id: 'skills', label: 'Skills' },
     { id: 'projects', label: 'Projects' },
     { id: 'contact', label: 'Contact' }
@@ -106,108 +104,52 @@ export class PortfolioPageComponent implements OnInit {
   constructor(private portfolioDataService: PortfolioDataService) {}
 
   ngOnInit(): void {
-    // Load data from service
     forkJoin({
       profile: this.portfolioDataService.getProfileWithSkills(),
-      projects: this.portfolioDataService.getProjects()
+      projects: this.portfolioDataService.getProjects(),
+      experiences: this.portfolioDataService.getExperiences()
     }).subscribe({
-      next: (data) => {
+      next: data => {
         this.profile = data.profile;
         this.projects = data.projects;
+        this.experiences = data.experiences;
         this.isLoading = false;
-        
-        // Update document title dynamically - prioritize ragingscout97 for SEO
-        document.title = `ragingscout97 - Portfolio | ${this.profile.name} | ${this.profile.role}`;
-        
-        // Update meta description dynamically
+        document.title = `${this.profile.name} | ${this.profile.role}`;
         this.updateMetaTags();
-        
-        // Update favicon dynamically if available
         if (this.profile.faviconUrl) {
           this.updateFavicon(this.profile.faviconUrl);
         }
-        
-        // Add structured data for SEO
-        this.addStructuredData();
       },
-      error: (error) => {
-        console.error('Error loading portfolio data:', error);
+      error: err => {
+        console.error('Error loading portfolio data:', err);
         this.isLoading = false;
       }
     });
   }
 
   private updateMetaTags(): void {
-    // Update meta description - prioritize ragingscout97 for SEO
-    let metaDescription = document.querySelector('meta[name="description"]');
-    if (!metaDescription) {
-      metaDescription = document.createElement('meta');
-      metaDescription.setAttribute('name', 'description');
-      document.head.appendChild(metaDescription);
-    }
-    metaDescription.setAttribute('content', `ragingscout97 - Portfolio of ${this.profile.name}. ${this.profile.role}. ${this.profile.tagline}. Visit ragingscout97.in`);
-
-    // Update Open Graph tags
-    this.updateMetaTag('property', 'og:title', `ragingscout97 - Portfolio | ${this.profile.name} | ${this.profile.role}`);
-    this.updateMetaTag('property', 'og:description', `ragingscout97 - Portfolio of ${this.profile.name}. ${this.profile.role}. ${this.profile.tagline}. Visit ragingscout97.in`);
-    this.updateMetaTag('property', 'og:url', 'https://ragingscout97.in/');
-    if (this.profile.photoUrl) {
-      this.updateMetaTag('property', 'og:image', this.profile.photoUrl);
-    }
-
-    // Update Twitter tags
-    this.updateMetaTag('name', 'twitter:title', `ragingscout97 - Portfolio | ${this.profile.name} | ${this.profile.role}`);
-    this.updateMetaTag('name', 'twitter:description', `ragingscout97 - Portfolio of ${this.profile.name}. ${this.profile.role}. Visit ragingscout97.in`);
-    this.updateMetaTag('name', 'twitter:url', 'https://ragingscout97.in/');
-    if (this.profile.photoUrl) {
-      this.updateMetaTag('name', 'twitter:image', this.profile.photoUrl);
-    }
+    const description = `${this.profile.name} — ${this.profile.role}. ${this.profile.tagline}`;
+    this.setMeta('name', 'description', description);
+    this.setMeta('property', 'og:title', `${this.profile.name} | Portfolio`);
+    this.setMeta('property', 'og:description', description);
+    this.setMeta('property', 'og:url', 'https://ragingscout97.in/');
   }
 
-  private updateMetaTag(attribute: string, value: string, content: string): void {
-    let meta = document.querySelector(`meta[${attribute}="${value}"]`);
+  private setMeta(attr: string, key: string, content: string): void {
+    let meta = document.querySelector(`meta[${attr}="${key}"]`);
     if (!meta) {
       meta = document.createElement('meta');
-      meta.setAttribute(attribute, value);
+      meta.setAttribute(attr, key);
       document.head.appendChild(meta);
     }
     meta.setAttribute('content', content);
   }
 
   private updateFavicon(faviconUrl: string): void {
-    // Remove existing favicons
-    const existingIcons = document.querySelectorAll("link[rel*='icon']");
-    existingIcons.forEach(icon => icon.remove());
-    
-    // Add new favicon
+    document.querySelectorAll("link[rel*='icon']").forEach(el => el.remove());
     const link = document.createElement('link');
     link.rel = 'icon';
-    link.type = 'image/x-icon';
     link.href = faviconUrl;
     document.head.appendChild(link);
   }
-
-  private addStructuredData(): void {
-    // Update the existing Person schema in HTML with dynamic data if needed
-    // The main structured data is already in index.html for better SEO
-    // This method can be used to enhance it with dynamic profile data if required
-    const existingScript = document.querySelector('script[type="application/ld+json"]');
-    if (existingScript && this.profile.photoUrl) {
-      try {
-        const schema = JSON.parse(existingScript.textContent || '{}');
-        // Update image if profile has a photo
-        if (this.profile.photoUrl && schema.image) {
-          schema.image = this.profile.photoUrl;
-          existingScript.textContent = JSON.stringify(schema);
-        }
-      } catch (e) {
-        console.warn('Could not update structured data:', e);
-      }
-    }
-  }
 }
-
-
-
-
-

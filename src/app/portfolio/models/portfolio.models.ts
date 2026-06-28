@@ -1,20 +1,27 @@
 export interface SocialLink {
-  name: string;   // e.g. "GitHub", "LinkedIn", "X"
+  id?: number;
+  name: string;
   url: string;
-  icon?: string;  // optional icon descriptor
+  icon?: string;
+  displayOrder?: number;
 }
 
 export interface Education {
+  id?: number;
   degree: string;
   institute: string;
   year: string;
+  displayOrder?: number;
 }
 
 export interface Skill {
+  id?: number;
   name: string;
+  displayOrder?: number;
 }
 
 export interface CurrentJob {
+  id?: number;
   title: string;
   company: string;
   since: string;
@@ -22,22 +29,29 @@ export interface CurrentJob {
 }
 
 export interface Experience {
+  id?: number;
   role: string;
   company: string;
   from: string;
   to: string;
-  description: string[];  // bullet points
+  description: string[];
+  displayOrder?: number;
 }
 
 export interface Project {
+  id?: number;
   name: string;
   description: string;
   techStack: string[];
   liveUrl?: string;
   githubUrl?: string;
+  demoUrl?: string;
+  imageUrl?: string;
+  displayOrder?: number;
 }
 
 export interface Profile {
+  id?: number;
   name: string;
   role: string;
   tagline: string;
@@ -50,7 +64,12 @@ export interface Profile {
   socialLinks: SocialLink[];
 }
 
-
-
-
-
+export interface PortfolioData {
+  profile: Profile | null;
+  educations: Education[];
+  skills: Skill[];
+  currentJob: CurrentJob | null;
+  socialLinks: SocialLink[];
+  experiences: Experience[];
+  projects: Project[];
+}

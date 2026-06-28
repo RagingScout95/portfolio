@@ -1,0 +1,34 @@
+---
+description: Angular 19 frontend conventions for portfolio-frontend
+globs: portfolio-frontend/**/*
+alwaysApply: false
+---
+
+# Frontend Angular Rules
+
+## Stack
+
+- Angular 19 standalone components (no NgModules)
+- Tailwind CSS 3.4 — use `Theme` from `constants/theme.constants.ts`
+- `@angular/animations` for enter/leave transitions where needed
+- RxJS via `PortfolioDataService` — single source for API data
+
+## Component patterns
+
+- Inline templates OK for small components; keep under ~120 lines or split
+- Use `@Input()` for data from parent; no duplicate HTTP calls in child components
+- Images: `loading="lazy"` except hero photo (`loading="eager"`)
+- Links: external use `target="_blank" rel="noreferrer"`
+
+## Styling
+
+- Design: premium dark — `bg-slate-950`, glass cards (`backdrop-blur`, `border-white/10`)
+- Accent: indigo/violet gradients; avoid pure black-on-black
+- Section padding: `py-20 md:py-28`; max width `max-w-6xl mx-auto px-4 md:px-8`
+- Section headings: `text-3xl md:text-4xl font-bold tracking-tight`
+
+## Do not
+
+- Remove or bypass `PortfolioDataService`
+- Change `environment.prod.ts` apiUrl without explicit request
+- Add heavy dependencies without justification
