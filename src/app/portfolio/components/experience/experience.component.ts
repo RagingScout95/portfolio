@@ -17,7 +17,7 @@ import { Experience } from '../../models/portfolio.models';
         <app-experience-item *ngFor="let exp of experiences; let i = index" [experience]="exp" [isLast]="i === experiences.length - 1"></app-experience-item>
       </div>
       <ng-template #noExp>
-        <div class="hud-panel p-8 text-center max-w-md mx-auto text-slate-500">Ops record pending.</div>
+        <div class="game-content-panel p-8 text-center max-w-md mx-auto text-slate-500">Ops record pending.</div>
       </ng-template>
     </div>
   `,

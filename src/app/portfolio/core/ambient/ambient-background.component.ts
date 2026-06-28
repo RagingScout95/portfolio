@@ -35,17 +35,15 @@ export class AmbientBackgroundComponent implements OnInit, AfterViewInit, OnDest
 
   ngAfterViewInit(): void {
     this.initCanvas();
-    if (!prefersReducedMotion()) {
-      this.animate();
-    } else {
-      this.drawStatic();
-    }
+    if (!prefersReducedMotion()) this.animate();
+    else this.drawStatic();
   }
 
   ngOnDestroy(): void {
     this.running = false;
     cancelAnimationFrame(this.rafId);
     document.removeEventListener('visibilitychange', this.onVisibility);
+    window.removeEventListener('resize', this.resize);
   }
 
   private onVisibility = (): void => {
@@ -72,31 +70,42 @@ export class AmbientBackgroundComponent implements OnInit, AfterViewInit, OnDest
   };
 
   private spawnParticles(): void {
-    const count = isMobileViewport() ? 28 : 70;
+    const count = isMobileViewport() ? 20 : 45;
     this.particles = Array.from({ length: count }, () => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      vx: (Math.random() - 0.5) * 0.25,
-      vy: (Math.random() - 0.5) * 0.25,
-      r: Math.random() * 1.5 + 0.5,
-      alpha: Math.random() * 0.4 + 0.1,
+      vx: (Math.random() - 0.5) * 0.15,
+      vy: (Math.random() - 0.5) * 0.15,
+      r: Math.random() * 1.2 + 0.3,
+      alpha: Math.random() * 0.35 + 0.05,
     }));
+  }
+
+  private drawGrid(ctx: CanvasRenderingContext2D, w: number, h: number): void {
+    const step = isMobileViewport() ? 48 : 64;
+    ctx.strokeStyle = 'rgba(232, 168, 56, 0.04)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < w; x += step) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, h);
+      ctx.stroke();
+    }
+    for (let y = 0; y < h; y += step) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(w, y);
+      ctx.stroke();
+    }
   }
 
   private drawStatic(): void {
     const ctx = this.ctx;
     const canvas = this.canvasRef?.nativeElement;
     if (!ctx || !canvas) return;
-    const g = ctx.createRadialGradient(
-      canvas.width * 0.5, canvas.height * 0.4, 0,
-      canvas.width * 0.5, canvas.height * 0.5, canvas.width * 0.6
-    );
-    g.addColorStop(0, 'rgba(94, 234, 212, 0.08)');
-    g.addColorStop(1, 'rgba(7, 11, 18, 0)');
-    ctx.fillStyle = '#070b12';
+    ctx.fillStyle = '#050508';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    this.drawGrid(ctx, canvas.width, canvas.height);
   }
 
   private animate = (): void => {
@@ -105,8 +114,9 @@ export class AmbientBackgroundComponent implements OnInit, AfterViewInit, OnDest
     const canvas = this.canvasRef?.nativeElement;
     if (!ctx || !canvas) return;
 
-    ctx.fillStyle = 'rgba(7, 11, 18, 0.35)';
+    ctx.fillStyle = 'rgba(5, 5, 8, 0.4)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    this.drawGrid(ctx, canvas.width, canvas.height);
 
     for (const p of this.particles) {
       p.x += p.vx;
@@ -118,7 +128,7 @@ export class AmbientBackgroundComponent implements OnInit, AfterViewInit, OnDest
 
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(94, 234, 212, ${p.alpha})`;
+      ctx.fillStyle = `rgba(232, 168, 56, ${p.alpha})`;
       ctx.fill();
     }
 

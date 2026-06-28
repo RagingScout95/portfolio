@@ -1,7 +1,7 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
-import { HudShellComponent } from '../components/hud/hud-shell.component';
+import { GameMenuRailComponent } from '../components/hud/game-menu-rail.component';
 import { HeroComponent } from '../components/hero/hero.component';
 import { AboutComponent } from '../components/about/about.component';
 import { SkillsComponent } from '../components/skills/skills.component';
@@ -11,7 +11,6 @@ import { ContactComponent } from '../components/contact/contact.component';
 import { BackToTopComponent } from '../components/ui/back-to-top/back-to-top.component';
 import { RevealOnScrollDirective } from '../directives/reveal-on-scroll.directive';
 import { AmbientBackgroundComponent } from '../core/ambient/ambient-background.component';
-import { TacticalMapComponent } from '../core/tactical-map/tactical-map.component';
 import { PortfolioDataService } from '../services/portfolio-data.service';
 import { NavSection } from '../components/navbar/navbar.component';
 import { ScrollContainerService } from '../core/motion/scroll-container.service';
@@ -23,8 +22,7 @@ import { Profile, Project, Experience } from '../models/portfolio.models';
   imports: [
     CommonModule,
     AmbientBackgroundComponent,
-    HudShellComponent,
-    TacticalMapComponent,
+    GameMenuRailComponent,
     HeroComponent,
     AboutComponent,
     SkillsComponent,
@@ -38,25 +36,28 @@ import { Profile, Project, Experience } from '../models/portfolio.models';
     <app-ambient-background></app-ambient-background>
 
     <div class="relative z-10 cockpit-bg min-h-screen text-slate-200">
-      <div *ngIf="isLoading" class="min-h-screen flex items-center justify-center">
-        <div class="hud-panel p-8 text-center font-mono max-w-sm mx-4">
-          <p class="hud-title mb-4">⟨ Sync ⟩</p>
-          <p class="text-teal-400/90 text-sm mb-4 animate-pulse">SYNCING PERSONNEL DATA...</p>
-          <div class="h-1 bg-slate-800 rounded-full overflow-hidden">
-            <div class="h-full w-2/3 bg-gradient-to-r from-teal-600 to-cyan-400 animate-pulse"></div>
+      <div *ngIf="isLoading" class="min-h-screen flex items-center justify-center lg:pl-[17rem]">
+        <div class="game-content-panel p-8 text-center font-mono max-w-sm mx-4">
+          <p class="hud-title mb-4">// sync</p>
+          <p class="text-amber-400/90 text-sm mb-4 animate-pulse">LOADING OPERATOR DATA...</p>
+          <div class="h-1 bg-black/50 overflow-hidden">
+            <div class="h-full w-2/3 bg-gradient-to-r from-amber-700 to-amber-400 animate-pulse"></div>
           </div>
         </div>
       </div>
 
       <ng-container *ngIf="!isLoading">
-        <app-hud-shell
+        <app-game-menu-rail
           [sections]="sections"
           [activeSection]="activeSection"
-          (mapOpen)="mapOpen = true"
+          [brandText]="'RS97'"
           (navigateSection)="goToSection($event)"
-        ></app-hud-shell>
+        ></app-game-menu-rail>
 
-        <main #mainScroll class="h-[calc(100vh-3.5rem)] mt-14 overflow-y-auto snap-y snap-mandatory scroll-smooth">
+        <main
+          #mainScroll
+          class="h-screen lg:pl-[17rem] pt-12 lg:pt-0 overflow-y-auto snap-y snap-mandatory scroll-smooth"
+        >
           <section id="hero" class="section-snap">
             <app-hero
               [name]="profile.name"
@@ -93,13 +94,6 @@ import { Profile, Project, Experience } from '../models/portfolio.models';
         </main>
 
         <app-back-to-top></app-back-to-top>
-
-        <app-tactical-map
-          [open]="mapOpen"
-          [sections]="sections"
-          (closed)="mapOpen = false"
-          (sectionSelected)="goToSection($event)"
-        ></app-tactical-map>
       </ng-container>
     </div>
   `,
@@ -111,17 +105,16 @@ export class PortfolioPageComponent implements OnInit, AfterViewInit {
   projects: Project[] = [];
   experiences: Experience[] = [];
   isLoading = true;
-  mapOpen = false;
   activeSection = 'hero';
 
   sections: NavSection[] = [
-    { id: 'hero', label: 'Home' },
-    { id: 'about', label: 'File' },
-    { id: 'timeline', label: 'Journey' },
-    { id: 'experience', label: 'Ops' },
-    { id: 'skills', label: 'Modules' },
+    { id: 'hero', label: 'Title' },
+    { id: 'about', label: 'Dossier' },
+    { id: 'timeline', label: 'Archive' },
+    { id: 'experience', label: 'Deployments' },
+    { id: 'skills', label: 'Loadout' },
     { id: 'projects', label: 'Missions' },
-    { id: 'contact', label: 'Comms' },
+    { id: 'contact', label: 'Uplink' },
   ];
 
   constructor(

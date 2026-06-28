@@ -15,7 +15,7 @@ import { SocialLink } from '../../models/portfolio.models';
         <h2 class="hud-heading mt-2">Contact</h2>
       </div>
       <div class="max-w-lg mx-auto">
-        <form (ngSubmit)="onSubmit()" class="hud-panel p-6 space-y-4">
+        <form (ngSubmit)="onSubmit()" class="game-content-panel p-6 space-y-4">
           <input type="text" [(ngModel)]="formData.name" name="name" required placeholder="Callsign / Name" class="w-full px-4 py-3 bg-black/30 border border-teal-500/20 text-slate-200 font-mono text-sm focus:border-teal-400 focus:outline-none"/>
           <input type="email" [(ngModel)]="formData.email" name="email" required placeholder="Email frequency" class="w-full px-4 py-3 bg-black/30 border border-teal-500/20 text-slate-200 font-mono text-sm focus:border-teal-400 focus:outline-none"/>
           <textarea [(ngModel)]="formData.message" name="message" required rows="4" placeholder="Transmission..." class="w-full px-4 py-3 bg-black/30 border border-teal-500/20 text-slate-200 font-mono text-sm focus:border-teal-400 focus:outline-none resize-none"></textarea>

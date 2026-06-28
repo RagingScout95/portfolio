@@ -9,7 +9,7 @@ import { environment } from '../../../../../environments/environment';
   standalone: true,
   imports: [CommonModule, ButtonComponent],
   template: `
-    <div class="hud-panel p-5 h-full flex flex-col hover:border-teal-400/40 hover:-translate-y-0.5 transition-all duration-300">
+    <div class="game-content-panel p-5 h-full flex flex-col hover:border-teal-400/40 hover:-translate-y-0.5 transition-all duration-300">
       <p class="hud-title mb-2">Mission</p>
       <h3 class="text-lg font-[Rajdhani] font-bold uppercase tracking-wide text-slate-100 mb-2">{{ project.name }}</h3>
       <p class="text-slate-400 text-sm flex-grow leading-relaxed mb-4">{{ project.description || 'Classified briefing pending.' }}</p>

@@ -19,17 +19,17 @@ import { prefersReducedMotion } from '../motion/motion.util';
     >
       <div class="absolute inset-0 crt-scanlines opacity-40"></div>
       <div class="relative w-full max-w-lg px-6 font-mono">
-        <p class="text-[10px] uppercase tracking-[0.4em] text-teal-500/60 mb-6">RagingScout97 Systems</p>
-        <div class="space-y-1 text-sm text-teal-300/90 mb-8 min-h-[120px]">
+          <p class="text-[10px] uppercase tracking-[0.4em] text-amber-500/60 mb-6">RagingScout97 Systems</p>
+        <div class="space-y-1 text-sm text-amber-200/80 mb-8 min-h-[120px]">
           <p *ngFor="let line of visibleLines" class="leading-relaxed">{{ line }}</p>
         </div>
-        <div class="hud-panel p-4">
+        <div class="game-content-panel p-4">
           <div class="flex justify-between text-[10px] uppercase tracking-widest text-slate-500 mb-2">
             <span>Boot sequence</span>
             <span>{{ progress }}%</span>
           </div>
           <div class="h-1 bg-slate-800 rounded-full overflow-hidden">
-            <div class="h-full bg-gradient-to-r from-teal-600 to-cyan-400 transition-all duration-150" [style.width.%]="progress"></div>
+            <div class="h-full bg-gradient-to-r from-amber-700 to-amber-400 transition-all duration-150" [style.width.%]="progress"></div>
           </div>
         </div>
         <p class="text-center text-[10px] text-slate-600 mt-6 uppercase tracking-widest animate-pulse">

@@ -5,7 +5,7 @@
 export const Theme = {
   background: {
     primary: 'cockpit-bg',
-    panel: 'hud-panel',
+    panel: 'game-content-panel',
   },
   text: {
     primary: 'text-slate-200',

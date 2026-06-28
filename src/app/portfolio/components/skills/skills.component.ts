@@ -20,7 +20,7 @@ import { Skill } from '../../models/portfolio.models';
         >[ {{ skill.name }} ]</span>
       </div>
       <ng-template #noSkills>
-        <div class="hud-panel p-8 text-center max-w-md mx-auto text-slate-500">No modules loaded yet.</div>
+        <div class="game-content-panel p-8 text-center max-w-md mx-auto text-slate-500">No modules loaded yet.</div>
       </ng-template>
     </div>
   `,

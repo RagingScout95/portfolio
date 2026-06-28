@@ -24,7 +24,7 @@ export interface TimelineItem {
           <p class="hud-title">⟨ Personnel File ⟩</p>
           <h2 class="hud-heading mt-2">About Me</h2>
         </div>
-        <div class="hud-panel p-8 md:p-10 max-w-3xl mx-auto" [class.mb-12]="mode === 'full'">
+        <div class="game-content-panel p-8 md:p-10 max-w-3xl mx-auto" [class.mb-12]="mode === 'full'">
           <p class="text-slate-300 leading-relaxed text-lg">{{ profile.about }}</p>
         </div>
       </ng-container>
@@ -35,7 +35,7 @@ export interface TimelineItem {
           <h2 class="hud-heading mt-2">Education & Career</h2>
         </div>
         <div class="max-w-2xl mx-auto space-y-4">
-          <div *ngFor="let item of timelineItems; let i = index" class="hud-panel p-6 stagger-item" [style.animation-delay.ms]="i * 60">
+          <div *ngFor="let item of timelineItems; let i = index" class="game-content-panel p-6 stagger-item" [style.animation-delay.ms]="i * 60">
             <div class="flex flex-wrap items-center gap-2 mb-2">
               <span class="text-xs font-[Rajdhani] font-bold uppercase tracking-wider text-teal-400">
                 {{ item.type === 'education' ? 'Education' : 'Current Role' }}
